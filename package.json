@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "etl:cbo": "tsx scripts/etl/01-load-cbo.ts",
     "etl:cnae": "tsx scripts/etl/02-load-cnae.ts",
     "etl:qbq": "tsx scripts/etl/03-load-qbq.ts",
