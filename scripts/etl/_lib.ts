@@ -2,11 +2,52 @@
 // Scripts read from data/ (read-only) and write cleaned records to the database.
 import fs from "node:fs";
 import { parse } from "csv-parse/sync";
+import { parse as parseStream } from "csv-parse";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
 
 export const DATA_DIR = "data";
+
+// ─── Reference maps for the market ETL (Phase 06) ─────────────────────────────
+
+/** IBGE 2-digit UF code → abbreviation. */
+export const UF_BY_IBGE: Record<string, string> = {
+  "11": "RO", "12": "AC", "13": "AM", "14": "RR", "15": "PA", "16": "AP", "17": "TO",
+  "21": "MA", "22": "PI", "23": "CE", "24": "RN", "25": "PB", "26": "PE", "27": "AL", "28": "SE", "29": "BA",
+  "31": "MG", "32": "ES", "33": "RJ", "35": "SP",
+  "41": "PR", "42": "SC", "43": "RS",
+  "50": "MS", "51": "MT", "52": "GO", "53": "DF",
+};
+
+/** Macro-region derived from the first digit of the IBGE UF code. */
+export function regionFromUfCode(ufCode: string): string | null {
+  switch (ufCode[0]) {
+    case "1": return "N";
+    case "2": return "NE";
+    case "3": return "SE";
+    case "4": return "S";
+    case "5": return "CO";
+    default: return null;
+  }
+}
+
+export const RAIS_SEX: Record<string, string> = { "1": "Masculino", "2": "Feminino" };
+
+export const RAIS_RACE: Record<string, string> = {
+  "1": "Indígena", "2": "Branca", "4": "Negra", "6": "Amarela", "8": "Parda", "9": "Não identificada",
+};
+
+export const RAIS_EDUCATION: Record<string, string> = {
+  "1": "Analfabeto", "2": "Até 5ª Incompleto", "3": "5ª Completo", "4": "6ª a 9ª Incompleto",
+  "5": "Fundamental Completo", "6": "Médio Incompleto", "7": "Médio Completo", "8": "Superior Incompleto",
+  "9": "Superior Completo", "10": "Mestrado", "11": "Doutorado",
+};
+
+export const RAIS_AGE_RANGE: Record<string, string> = {
+  "1": "10 a 14", "2": "15 a 17", "3": "18 a 24", "4": "25 a 29", "5": "30 a 39",
+  "6": "40 a 49", "7": "50 a 64", "8": "65 ou mais",
+};
 
 /** Collapse repeated whitespace and trim — government text is full of stray spaces. */
 export function clean(value: string | undefined | null): string {
@@ -68,6 +109,32 @@ export async function upsertByCode<T extends { code: string }>(
       })
     );
   }
+}
+
+/**
+ * Stream a (potentially multi-GB) delimited file line by line, calling `onRecord`
+ * for each row. Never loads the whole file into memory. Returns the row count.
+ */
+export async function streamRecords(
+  path: string,
+  { encoding = "utf8", delimiter = ";" }: ReadOptions,
+  onRecord: (row: Record<string, string>, index: number) => void
+): Promise<number> {
+  const parser = fs.createReadStream(path, { encoding }).pipe(
+    parseStream({
+      columns: (header: string[]) => header.map((h) => h.trim()),
+      delimiter,
+      bom: true,
+      relax_column_count: true,
+      skip_empty_lines: true,
+    })
+  );
+  let i = 0;
+  for await (const row of parser as AsyncIterable<Record<string, string>>) {
+    onRecord(row, i);
+    i++;
+  }
+  return i;
 }
 
 /** Insert rows in chunks via createMany (fast path for large, non-keyed tables). */

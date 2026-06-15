@@ -11,7 +11,12 @@
     "etl:cnae": "tsx scripts/etl/02-load-cnae.ts",
     "etl:qbq": "tsx scripts/etl/03-load-qbq.ts",
     "etl:courses": "tsx scripts/etl/04-load-courses.ts",
-    "etl:static": "tsx scripts/etl/run-all-static.ts"
+    "etl:static": "tsx scripts/etl/run-all-static.ts",
+    "etl:inspect-caged": "tsx scripts/etl/05-inspect-caged.ts",
+    "etl:inspect-rais": "tsx scripts/etl/07-inspect-rais.ts",
+    "etl:caged": "tsx scripts/etl/06-load-caged.ts",
+    "etl:rais": "tsx scripts/etl/08-load-rais.ts",
+    "etl:market": "tsx scripts/etl/run-all-market.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
