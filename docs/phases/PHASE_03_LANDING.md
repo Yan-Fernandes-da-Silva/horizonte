@@ -1,6 +1,6 @@
 # Phase 03 — Landing Page (Pre-login)
 
-**Status**: Pending
+**Status**: Concluída
 **Estimated time**: 3–5 hours
 **Prerequisites**: Phase 02 complete
 
