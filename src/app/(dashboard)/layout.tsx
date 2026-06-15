@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 export default async function DashboardLayout({
   children,
@@ -28,6 +29,7 @@ export default async function DashboardLayout({
       <Header variant="dashboard" user={user} />
       <main className="flex-1 py-8">{children}</main>
       <Footer />
+      <Toaster richColors position="top-center" />
     </div>
   );
 }
