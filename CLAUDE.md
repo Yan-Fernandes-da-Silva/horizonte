@@ -268,7 +268,7 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 | 05    | ETL — Static Data            | Concluída |
 | 06    | ETL — Market Data            | Concluída |
 | 07    | Vocational Test              | Concluída |
-| 08    | Labor Market                 | Pending |
+| 08    | Labor Market                 | Concluída |
 | 09    | Career Plan                  | Pending |
 | 10    | Deploy                       | Pending |
 
@@ -276,8 +276,8 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 
 ## Current Phase
 
-**Last completed: PHASE 07 — Vocational Test** (banco de 54 perguntas data-driven em `src/lib/vocational-test/`, motor de pontuação RIASEC/MI, mapeamento RIASEC→CBO, questionário com salvar/retomar, página de resultados com gráficos + profissões/cursos compatíveis + favoritar).
+**Last completed: PHASE 08 — Labor Market** (busca de profissões + dashboard `/labor-market/[code]` com 4 abas — Visão Geral, Mercado, Remuneração, Perfil — alimentado por queries reais ao MarketMetrics; cartograma de tiles + filtros Região/UF via URL; indicadores por percentil entre ocupações).
 
-**→ Next: PHASE 08 — Labor Market** (awaiting Yan's approval to start).
+**→ Next: PHASE 09 — Career Plan** (awaiting Yan's approval to start).
 
 To start: ask Yan which phase to execute, then read the corresponding `docs/phases/PHASE_XX_*.md` file.
