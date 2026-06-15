@@ -265,7 +265,7 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 | 02    | Authentication               | Concluída |
 | 03    | Landing Page                 | Concluída |
 | 04    | Home Dashboard               | Concluída |
-| 05    | ETL — Static Data            | Pending |
+| 05    | ETL — Static Data            | Concluída |
 | 06    | ETL — Market Data            | Pending |
 | 07    | Vocational Test              | Pending |
 | 08    | Labor Market                 | Pending |
@@ -276,8 +276,8 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 
 ## Current Phase
 
-**Last completed: PHASE 04 — Home Dashboard** (welcome banner, 3 dynamic feature status cards, daily tip; server-side data fetching; responsive).
+**Last completed: PHASE 05 — ETL Static Data** (CBO 2.725 ocupações, CNAE 1.331 subclasses, QBQ ~258k itens, 7.659 cursos; scripts em `scripts/etl/`, rodados via `npm run etl:static`).
 
-**→ Next: PHASE 05 — ETL Static Data** (awaiting Yan's approval to start).
+**→ Next: PHASE 06 — ETL Market Data** (awaiting Yan's approval to start).
 
 To start: ask Yan which phase to execute, then read the corresponding `docs/phases/PHASE_XX_*.md` file.

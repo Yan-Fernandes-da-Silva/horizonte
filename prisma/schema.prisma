@@ -38,11 +38,12 @@ model VocationalTestSession {
 }
 
 model FavoriteProfession {
-  id             String   @id @default(cuid())
+  id             String        @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   occupationCode String
-  createdAt      DateTime @default(now())
+  occupation     CboOccupation @relation(fields: [occupationCode], references: [code])
+  createdAt      DateTime      @default(now())
 
   @@unique([userId, occupationCode])
 }
@@ -53,6 +54,7 @@ model CareerPlan {
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   title          String
   occupationCode String?
+  occupation     CboOccupation? @relation(fields: [occupationCode], references: [code])
   questionnaire  Json?
   roadmap        Json?
   status         String   @default("active")
@@ -74,4 +76,167 @@ model CareerTask {
   sortOrder   Int        @default(0)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+}
+
+// ─── CBO Hierarchy (seeded from ETL — Phase 05) ───────────────────────────────
+
+model CboLargeGroup {
+  code      String            @id // 1-digit
+  title     String
+  subgroups CboMainSubgroup[]
+}
+
+model CboMainSubgroup {
+  code           String        @id // 2-digit
+  title          String
+  largeGroupCode String
+  largeGroup     CboLargeGroup @relation(fields: [largeGroupCode], references: [code])
+  subgroups      CboSubgroup[]
+}
+
+model CboSubgroup {
+  code             String          @id // 3-digit
+  title            String
+  mainSubgroupCode String
+  mainSubgroup     CboMainSubgroup @relation(fields: [mainSubgroupCode], references: [code])
+  families         CboFamily[]
+}
+
+model CboFamily {
+  code         String          @id // 4-digit
+  title        String
+  subgroupCode String
+  subgroup     CboSubgroup     @relation(fields: [subgroupCode], references: [code])
+  occupations  CboOccupation[]
+}
+
+model CboOccupation {
+  code        String  @id // 6-digit CBO code (key identifier across all features)
+  title       String
+  description String?
+  familyCode  String
+  family      CboFamily @relation(fields: [familyCode], references: [code])
+
+  // Relations
+  favoritedBy   FavoriteProfession[]
+  marketMetrics MarketMetrics[]
+  qbqKnowledges QbqKnowledge[]
+  qbqSkills     QbqSkill[]
+  qbqAttitudes  QbqAttitude[]
+  careerPlans   CareerPlan[]
+}
+
+// ─── CNAE Hierarchy (seeded from ETL — Phase 05) ──────────────────────────────
+
+model CnaeSection {
+  code      String         @id // Letter (A-U)
+  title     String
+  divisions CnaeDivision[]
+}
+
+model CnaeDivision {
+  code        String      @id // 2-digit
+  title       String
+  sectionCode String
+  section     CnaeSection @relation(fields: [sectionCode], references: [code])
+  groups      CnaeGroup[]
+}
+
+model CnaeGroup {
+  code         String       @id // 3-digit
+  title        String
+  divisionCode String
+  division     CnaeDivision @relation(fields: [divisionCode], references: [code])
+  classes      CnaeClass[]
+}
+
+model CnaeClass {
+  code       String         @id // 5-digit
+  title      String
+  groupCode  String
+  group      CnaeGroup      @relation(fields: [groupCode], references: [code])
+  subclasses CnaeSubclass[]
+}
+
+model CnaeSubclass {
+  code      String    @id // 7-digit (used in RAIS and CAGED)
+  title     String
+  classCode String
+  class     CnaeClass @relation(fields: [classCode], references: [code])
+}
+
+// ─── QBQ (seeded from ETL — Phase 05) ─────────────────────────────────────────
+
+model QbqKnowledge {
+  id             Int           @id @default(autoincrement())
+  occupationCode String
+  occupation     CboOccupation @relation(fields: [occupationCode], references: [code])
+  description    String
+
+  @@index([occupationCode])
+}
+
+model QbqSkill {
+  id             Int           @id @default(autoincrement())
+  occupationCode String
+  occupation     CboOccupation @relation(fields: [occupationCode], references: [code])
+  description    String
+
+  @@index([occupationCode])
+}
+
+model QbqAttitude {
+  id             Int           @id @default(autoincrement())
+  occupationCode String
+  occupation     CboOccupation @relation(fields: [occupationCode], references: [code])
+  description    String
+
+  @@index([occupationCode])
+}
+
+// ─── Qualifications / Courses (seeded from ETL — Phase 05) ─────────────────────
+
+model Course {
+  id          Int     @id @default(autoincrement())
+  name        String
+  type        String // 'technical' | 'technological' | 'graduate' | 'postgraduate'
+  area        String?
+  subarea     String?
+  institution String?
+  duration    String? // ex: "4 anos" or "1800h"
+  degree      String? // ex: "Bacharel", "Tecnólogo", "Técnico"
+
+  @@index([type])
+}
+
+// ─── Market Metrics (placeholder — populated in Phase 06) ─────────────────────
+
+model MarketMetrics {
+  id             Int           @id @default(autoincrement())
+  occupationCode String
+  occupation     CboOccupation @relation(fields: [occupationCode], references: [code])
+  uf             String // state abbreviation (AC, AM, SP, etc.)
+  region         String // N | NE | CO | SE | S
+  period         String // YYYYMM for CAGED, YYYY for RAIS
+  source         String // 'caged' | 'rais'
+
+  // CAGED metrics (monthly)
+  admissions Int?
+  dismissals Int?
+  balance    Int?
+
+  // RAIS metrics (annual)
+  avgSalary       Float?
+  avgWeeklyHours  Float?
+  avgTenureMonths Float?
+  stockTotal      Int? // total active employment bonds
+
+  // Distribution JSON fields (RAIS only)
+  ageDistribution       Json? // { "18-24": 120, "25-34": 340, ... }
+  sexDistribution       Json? // { "M": 500, "F": 300 }
+  educationDistribution Json? // { "Ensino Médio": 200, "Superior": 150, ... }
+  raceDistribution      Json? // { "Branca": 300, "Parda": 250, ... }
+  disabilityCount       Int?
+
+  @@index([occupationCode, uf, period, source])
 }

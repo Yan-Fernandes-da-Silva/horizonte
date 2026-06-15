@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "etl:cbo": "tsx scripts/etl/01-load-cbo.ts",
+    "etl:cnae": "tsx scripts/etl/02-load-cnae.ts",
+    "etl:qbq": "tsx scripts/etl/03-load-qbq.ts",
+    "etl:courses": "tsx scripts/etl/04-load-courses.ts",
+    "etl:static": "tsx scripts/etl/run-all-static.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -42,11 +47,13 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "csv-parse": "^7.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "prisma": "^6.19.3",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }
