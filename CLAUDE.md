@@ -262,7 +262,7 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 |-------|------------------------------|---------|
 | 00    | Project Setup                | Concluída |
 | 01    | Design System & Layout Base  | Concluída |
-| 02    | Authentication               | Pending |
+| 02    | Authentication               | Concluída |
 | 03    | Landing Page                 | Pending |
 | 04    | Home Dashboard               | Pending |
 | 05    | ETL — Static Data            | Pending |
@@ -276,6 +276,8 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 
 ## Current Phase
 
-**→ PHASE 00 — Project Setup**
+**Last completed: PHASE 02 — Authentication** (login, register, password recovery, route protection — tested end-to-end).
+
+**→ Next: PHASE 03 — Landing Page** (awaiting Yan's approval to start).
 
 To start: ask Yan which phase to execute, then read the corresponding `docs/phases/PHASE_XX_*.md` file.

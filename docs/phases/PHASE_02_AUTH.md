@@ -1,6 +1,6 @@
 # Phase 02 — Authentication (Register / Login / Password Recovery)
 
-**Status**: Pending
+**Status**: Concluída
 **Estimated time**: 3–5 hours
 **Prerequisites**: Phase 01 complete
 

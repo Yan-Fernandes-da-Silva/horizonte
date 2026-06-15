@@ -14,8 +14,64 @@ model User {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
-  password  String
-  avatar    String?
+  password  String // bcrypt hashed
+  avatar    String? // URL or null (initials used as fallback)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations (expanded in later phases)
+  vocationalSessions  VocationalTestSession[]
+  favoriteProfessions FavoriteProfession[]
+  careerPlans         CareerPlan[]
+}
+
+// Placeholder models for future relations (filled in later phases)
+model VocationalTestSession {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      String    @default("not_started") // not_started | in_progress | completed
+  answers     Json?
+  results     Json?
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+}
+
+model FavoriteProfession {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  occupationCode String
+  createdAt      DateTime @default(now())
+
+  @@unique([userId, occupationCode])
+}
+
+model CareerPlan {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  occupationCode String?
+  questionnaire  Json?
+  roadmap        Json?
+  status         String   @default("active")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  tasks CareerTask[]
+}
+
+model CareerTask {
+  id          String     @id @default(cuid())
+  planId      String
+  plan        CareerPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  category    String // short_term | medium_term | long_term
+  status      String     @default("pending") // pending | in_progress | completed
+  dueDate     DateTime?
+  sortOrder   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }

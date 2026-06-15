@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LogOut, Menu, Settings, User, X } from "lucide-react";
 
@@ -182,12 +183,12 @@ function UserMenu({ user }: { user: HeaderUser }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {/* Phase 02 wires real sign-out via next-auth signOut(). */}
-        <DropdownMenuItem asChild>
-          <Link href="/">
-            <LogOut className="mr-2 h-4 w-4" />
-            Sair
-          </Link>
+        <DropdownMenuItem
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="cursor-pointer"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -274,13 +275,16 @@ function MobileDrawer({
           >
             Configurações
           </Link>
-          <Link
-            href="/"
-            onClick={onClose}
-            className="rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5"
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              signOut({ callbackUrl: "/" });
+            }}
+            className="rounded-lg px-3 py-2 text-left text-sm text-white/80 hover:bg-white/5"
           >
             Sair
-          </Link>
+          </button>
         </div>
       </motion.aside>
     </div>
