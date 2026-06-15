@@ -269,15 +269,15 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 | 06    | ETL — Market Data            | Concluída |
 | 07    | Vocational Test              | Concluída |
 | 08    | Labor Market                 | Concluída |
-| 09    | Career Plan                  | Pending |
+| 09    | Career Plan                  | Concluída |
 | 10    | Deploy                       | Pending |
 
 ---
 
 ## Current Phase
 
-**Last completed: PHASE 08 — Labor Market** (busca de profissões + dashboard `/labor-market/[code]` com 4 abas — Visão Geral, Mercado, Remuneração, Perfil — alimentado por queries reais ao MarketMetrics; cartograma de tiles + filtros Região/UF via URL; indicadores por percentil entre ocupações).
+**Last completed: PHASE 09 — Career Plan** (questionário SMART de 6 passos → roadmap gerado pela API da Claude (`claude-haiku-4-5`, saída estruturada) com fallback sem IA; roadmap editável com CRUD de tarefas, progresso e conquistas. Requer `ANTHROPIC_API_KEY` no `.env.local` para a geração por IA).
 
-**→ Next: PHASE 09 — Career Plan** (awaiting Yan's approval to start).
+**→ Next: PHASE 10 — Deploy** (awaiting Yan's approval to start).
 
 To start: ask Yan which phase to execute, then read the corresponding `docs/phases/PHASE_XX_*.md` file.
