@@ -260,8 +260,8 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 
 | Phase | Name                         | Status  |
 |-------|------------------------------|---------|
-| 00    | Project Setup                | Pending |
-| 01    | Design System & Layout Base  | Pending |
+| 00    | Project Setup                | Concluída |
+| 01    | Design System & Layout Base  | Concluída |
 | 02    | Authentication               | Pending |
 | 03    | Landing Page                 | Pending |
 | 04    | Home Dashboard               | Pending |

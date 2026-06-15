@@ -1,6 +1,6 @@
 # Phase 01 — Design System & Layout Base
 
-**Status**: Pending
+**Status**: Concluída
 **Estimated time**: 2–4 hours
 **Prerequisites**: Phase 00 complete
 

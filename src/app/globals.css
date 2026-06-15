@@ -63,7 +63,81 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
+  }
+  ::selection {
+    @apply bg-sky/20 text-ocean;
+  }
+}
+
+/* ── Horizonte — nautical horizon motion & gradients ───────────────────── */
+
+@keyframes horizonte-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes horizonte-wave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes horizonte-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@layer utilities {
+  /* Ocean → sky natural gradient (static) */
+  .bg-ocean-gradient {
+    background-image: linear-gradient(135deg, #0a2342 0%, #1b4f8a 55%, #00b4d8 100%);
+  }
+  /* Same gradient, slowly panning like water */
+  .bg-ocean-gradient-animated {
+    background-image: linear-gradient(135deg, #0a2342 0%, #1b4f8a 50%, #00b4d8 100%);
+    background-size: 200% 200%;
+    animation: horizonte-gradient 14s ease infinite;
+  }
+  /* Frosted glass surfaces */
+  .glass {
+    @apply bg-white/70 backdrop-blur-md;
+  }
+  .glass-ocean {
+    @apply bg-ocean/80 backdrop-blur-md;
+  }
+  .animate-wave {
+    animation: horizonte-wave 6s ease-in-out infinite;
+  }
+  .animate-float {
+    animation: horizonte-float 7s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-ocean-gradient-animated,
+  .animate-wave,
+  .animate-float {
+    animation: none;
   }
 }

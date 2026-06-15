@@ -1,6 +1,6 @@
 # Phase 00 — Project Setup
 
-**Status**: Pending
+**Status**: Concluída
 **Estimated time**: 30–60 minutes
 **Prerequisites**: None (this is the first phase)
 
