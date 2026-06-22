@@ -41,3 +41,8 @@ next-env.d.ts
 
 # raw government data (too large for GitHub — read-only source files)
 /data/
+
+# internal workflow material (kept locally, not versioned)
+/feedbacks/
+/GUIA_DE_FEEDBACK.md
+/GUIA_TESTE_MOBILE.md
