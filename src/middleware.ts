@@ -7,8 +7,10 @@ const protectedPrefixes = [
   "/vocational-test",
   "/labor-market",
   "/career-plan",
+  "/profile",
 ];
-const authPages = ["/login", "/register", "/forgot-password"];
+// Pages a logged-in user should not see (landing + auth flow).
+const publicOnlyPages = ["/login", "/register", "/forgot-password"];
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({
@@ -21,21 +23,23 @@ export async function middleware(req: NextRequest) {
   const isProtected = protectedPrefixes.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`)
   );
-  const isAuthPage = authPages.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  );
+  const isLanding = pathname === "/";
+  const isPublicOnly =
+    isLanding ||
+    publicOnlyPages.some(
+      (path) => pathname === path || pathname.startsWith(`${path}/`)
+    );
 
-  // Not logged in trying to reach a protected page → send to login.
+  // Not logged in trying to reach a protected page → send to the landing page.
   if (isProtected && !isAuthenticated) {
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/";
     url.search = "";
-    url.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(url);
   }
 
-  // Already logged in trying to reach an auth page → send to home.
-  if (isAuthPage && isAuthenticated) {
+  // Already logged in trying to reach the landing or an auth page → send home.
+  if (isPublicOnly && isAuthenticated) {
     const url = req.nextUrl.clone();
     url.pathname = "/home";
     url.search = "";
@@ -47,6 +51,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
     "/home",
     "/home/:path*",
     "/vocational-test",
@@ -55,6 +60,8 @@ export const config = {
     "/labor-market/:path*",
     "/career-plan",
     "/career-plan/:path*",
+    "/profile",
+    "/profile/:path*",
     "/login",
     "/register",
     "/forgot-password",

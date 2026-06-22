@@ -8,16 +8,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import { RegisterSchema, type RegisterInput } from "@/lib/validations/auth";
+import { AuthBrand } from "@/components/shared/AuthBrand";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 export default function RegisterPage() {
@@ -54,12 +53,9 @@ export default function RegisterPage() {
   }
 
   return (
-    <Card className="border-white/20 bg-white/95 shadow-2xl backdrop-blur">
+    <Card className="mx-auto max-w-sm border-white/20 bg-white/95 shadow-2xl backdrop-blur">
       <CardHeader>
-        <CardTitle className="text-2xl text-ocean">Criar conta</CardTitle>
-        <CardDescription>
-          Comece a planejar sua carreira com o Horizonte.
-        </CardDescription>
+        <AuthBrand />
       </CardHeader>
       <CardContent>
         {formError && (
@@ -69,12 +65,12 @@ export default function RegisterPage() {
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           <div className="space-y-1.5">
-            <Label htmlFor="name">Nome completo</Label>
+            <Label htmlFor="name">Nome</Label>
             <Input
               id="name"
               type="text"
               autoComplete="name"
-              placeholder="Seu nome"
+              placeholder="João da Silva"
               {...register("name")}
             />
             {errors.name && (
@@ -87,7 +83,7 @@ export default function RegisterPage() {
               id="email"
               type="email"
               autoComplete="email"
-              placeholder="voce@exemplo.com"
+              placeholder="joao@dominio.com"
               {...register("email")}
             />
             {errors.email && (
@@ -101,6 +97,7 @@ export default function RegisterPage() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
+                placeholder="Digite a senha"
                 className="pr-10"
                 {...register("password")}
               />
@@ -131,6 +128,7 @@ export default function RegisterPage() {
                 id="confirmPassword"
                 type={showConfirm ? "text" : "password"}
                 autoComplete="new-password"
+                placeholder="Digite a senha novamente"
                 className="pr-10"
                 {...register("confirmPassword")}
               />

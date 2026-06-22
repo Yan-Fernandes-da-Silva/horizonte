@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Âncora">
+  <circle cx="100" cy="100" r="100" fill="#00B4D8"/>
+  <g stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="100" cy="54" r="12"/>
+    <line x1="100" y1="66" x2="100" y2="150"/>
+    <line x1="72" y1="92" x2="128" y2="92"/>
+    <path d="M54 116 Q58 154 100 156 Q142 154 146 116"/>
+  </g>
+</svg>

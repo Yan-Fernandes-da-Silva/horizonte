@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-// Repo URL — update once the GitHub remote is confirmed.
-const GITHUB_URL = "https://github.com";
+// Project repository.
+const GITHUB_URL = "https://github.com/Yan-Fernandes-da-Silva/horizonte";
 
 // Inline GitHub mark (lucide-react dropped brand icons in recent versions).
 function GithubIcon({ className }: { className?: string }) {
@@ -15,19 +15,19 @@ function GithubIcon({ className }: { className?: string }) {
 export function Footer() {
   return (
     <footer className="bg-ocean text-white">
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-8 text-center sm:flex-row sm:justify-between sm:px-6 sm:text-left lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
           href={GITHUB_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-white/80 transition-colors hover:text-sky-light"
+          className="inline-flex shrink-0 items-center gap-1.5 text-xs text-white/80 transition-colors hover:text-sky-light sm:gap-2 sm:text-sm"
         >
-          <GithubIcon className="h-5 w-5" />
+          <GithubIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           Código no GitHub
         </Link>
-        <div className="sm:text-right">
-          <p className="text-lg font-bold">Horizonte</p>
-          <p className="text-sm text-white/70">
+        <div className="text-right">
+          <p className="text-base font-bold sm:text-lg">Horizonte</p>
+          <p className="max-w-[12rem] text-xs text-white/70 sm:max-w-none sm:text-sm">
             Acompanhamento inteligente da sua carreira profissional
           </p>
         </div>

@@ -9,10 +9,12 @@ import { cn } from "@/lib/utils";
 interface Props {
   occupationCode: string;
   initialFavorited?: boolean;
+  /** "glass" = transparent button for dark glass headers (gold heart when active). */
+  variant?: "default" | "glass";
 }
 
 /** Toggles a favorited occupation (used in results and the labor-market feature). */
-export function FavoriteButton({ occupationCode, initialFavorited = false }: Props) {
+export function FavoriteButton({ occupationCode, initialFavorited = false, variant = "default" }: Props) {
   const [favorited, setFavorited] = React.useState(initialFavorited);
   const [loading, setLoading] = React.useState(false);
 
@@ -24,16 +26,29 @@ export function FavoriteButton({ occupationCode, initialFavorited = false }: Pro
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ occupationCode }),
       });
+      const data = (await res.json().catch(() => ({}))) as {
+        favorited?: boolean;
+        error?: string;
+        limitReached?: boolean;
+      };
+      // Hit the favorites cap → show the bottom-right notice (not a toast).
+      if (res.status === 409 && data.limitReached) {
+        window.dispatchEvent(
+          new CustomEvent("favorites:limit", { detail: { message: data.error } })
+        );
+        return;
+      }
       if (!res.ok) throw new Error();
-      const { favorited: now } = (await res.json()) as { favorited: boolean };
-      setFavorited(now);
-      toast.success(now ? "Profissão favoritada!" : "Removida dos favoritos.");
+      setFavorited(Boolean(data.favorited));
+      toast.success(data.favorited ? "Profissão favoritada!" : "Removida dos favoritos.");
     } catch {
       toast.error("Não foi possível atualizar o favorito.");
     } finally {
       setLoading(false);
     }
   };
+
+  const isGlass = variant === "glass";
 
   return (
     <button
@@ -43,15 +58,22 @@ export function FavoriteButton({ occupationCode, initialFavorited = false }: Pro
       aria-pressed={favorited}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors",
-        favorited
-          ? "border-sun/40 bg-sun/10 text-sun"
-          : "border-border bg-white text-muted-foreground hover:border-sun/40 hover:text-sun"
+        isGlass
+          ? "border-white/30 bg-transparent text-white hover:bg-white/10"
+          : favorited
+            ? "border-red-400/50 bg-red-500/30 text-white"
+            : "border-border bg-white text-muted-foreground hover:border-sun/40 hover:text-sun"
       )}
     >
       {loading ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : (
-        <Heart className={cn("h-4 w-4", favorited && "fill-sun")} />
+        <Heart
+          className={cn(
+            "h-4 w-4",
+            favorited && (isGlass ? "fill-gold text-gold" : "fill-red-500 text-red-500")
+          )}
+        />
       )}
       {favorited ? "Favoritada" : "Favoritar"}
     </button>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Bússola">
+  <circle cx="100" cy="100" r="100" fill="#0a4f86"/>
+  <circle cx="100" cy="100" r="48" fill="none" stroke="#ffffff" stroke-width="5"/>
+  <polygon points="100,56 113,100 100,90 87,100" fill="#F4A261"/>
+  <polygon points="100,144 87,100 100,110 113,100" fill="#ffffff"/>
+  <circle cx="100" cy="100" r="6" fill="#ffffff"/>
+</svg>

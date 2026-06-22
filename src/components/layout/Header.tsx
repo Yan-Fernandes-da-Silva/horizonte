@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { LogOut, Menu, Settings, User, X } from "lucide-react";
+import { LogOut, Menu, User, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/Logo";
@@ -15,7 +15,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -54,18 +53,40 @@ export function Header({ variant, user }: HeaderProps) {
 }
 
 function PublicHeader() {
+  // Hidden over the Hero; slides in once the user scrolls into the AboutSection,
+  // and hides again when they scroll back to the top.
+  const [show, setShow] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      setShow(window.scrollY > window.innerHeight * 0.7);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-white/70 backdrop-blur-md">
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ocean text-white shadow-md transition-transform duration-300",
+        show ? "translate-y-0" : "-translate-y-full"
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2 text-ocean">
-          <Logo className="h-7 w-7" />
-          <span className="text-xl font-bold">Horizonte</span>
+        <Link href="/" className="flex items-center gap-2">
+          <Logo className="h-7 w-7 text-helm" />
+          <span className="text-xl font-bold text-white">Horizonte</span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
           <Button
             asChild
             variant="outline"
-            className="border-ocean/30 text-ocean hover:bg-ocean/5"
+            className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
           >
             <Link href="/login">Entrar</Link>
           </Button>
@@ -100,10 +121,10 @@ function DashboardHeader({ user }: { user?: HeaderUser }) {
   }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-ocean/80 text-white backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-ocean text-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/home" className="flex items-center gap-2 text-white">
-          <Logo className="h-7 w-7" />
+          <Logo className="h-7 w-7 text-helm" />
           <span className="text-xl font-bold">Horizonte</span>
         </Link>
 
@@ -114,8 +135,7 @@ function DashboardHeader({ user }: { user?: HeaderUser }) {
               key={link.href}
               href={link.href}
               className={cn(
-                "relative py-1 text-sm font-medium transition-colors",
-                isActive(link.href) ? "text-white" : "text-white/75 hover:text-white"
+                "relative py-1 text-sm font-medium text-white transition-colors"
               )}
             >
               {link.label}
@@ -168,18 +188,10 @@ function UserMenu({ user }: { user: HeaderUser }) {
         <span className="max-w-[8rem] truncate text-sm font-medium">{user.name}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/settings">
+          <Link href="/profile">
             <User className="mr-2 h-4 w-4" />
             Meu perfil
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/settings">
-            <Settings className="mr-2 h-4 w-4" />
-            Configurações
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -262,18 +274,11 @@ function MobileDrawer({
 
         <div className="mt-auto flex flex-col gap-1 border-t border-white/10 pt-4">
           <Link
-            href="/settings"
+            href="/profile"
             onClick={onClose}
             className="rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5"
           >
             Meu perfil
-          </Link>
-          <Link
-            href="/settings"
-            onClick={onClose}
-            className="rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5"
-          >
-            Configurações
           </Link>
           <button
             type="button"

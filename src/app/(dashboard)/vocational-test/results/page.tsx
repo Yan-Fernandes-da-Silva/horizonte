@@ -63,10 +63,11 @@ export default async function VocationalTestResultsPage() {
   const interests = (results.gopc?.["G8"] as string[] | undefined) ?? [];
 
   return (
+    <div className="-my-8 flex-1 bg-sea-top py-8">
     <PageContainer className="max-w-5xl space-y-10">
       {/* Hero */}
       <Reveal>
-        <div className="rounded-2xl bg-ocean-gradient px-6 py-10 text-center text-white shadow-md">
+        <div className="rounded-2xl border border-white/15 bg-white/10 px-6 py-10 text-center text-white shadow-sm backdrop-blur-sm">
           <h1 className="text-2xl font-bold sm:text-3xl">Seu perfil profissional está pronto! 🎉</h1>
           <p className="mt-2 text-white/80">
             Veja seus tipos dominantes, inteligências mais fortes e as profissões mais compatíveis com você.
@@ -77,7 +78,7 @@ export default async function VocationalTestResultsPage() {
       {/* RIASEC */}
       <Reveal>
         <section>
-          <h2 className="text-xl font-bold text-ocean">Seus interesses (RIASEC)</h2>
+          <h2 className="text-xl font-bold text-white">Seus interesses (RIASEC)</h2>
           <div className="mt-4 grid items-center gap-6 md:grid-cols-2">
             <div className="rounded-2xl border border-border bg-white/70 p-4 backdrop-blur-sm">
               <RiasecRadar riasec={results.riasec} />
@@ -102,7 +103,7 @@ export default async function VocationalTestResultsPage() {
       {/* Multiple intelligences */}
       <Reveal>
         <section>
-          <h2 className="text-xl font-bold text-ocean">Suas inteligências</h2>
+          <h2 className="text-xl font-bold text-white">Suas inteligências</h2>
           <div className="mt-4 grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl border border-border bg-white/70 p-4 backdrop-blur-sm">
               <MiBars mi={results.mi} />
@@ -127,7 +128,7 @@ export default async function VocationalTestResultsPage() {
       {/* GOPC profile */}
       <Reveal>
         <section>
-          <h2 className="text-xl font-bold text-ocean">Seu perfil de carreira</h2>
+          <h2 className="text-xl font-bold text-white">Seu perfil de carreira</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {GOPC_CARDS.map(({ id, title }) => {
               const value = results.gopc?.[id];
@@ -156,8 +157,8 @@ export default async function VocationalTestResultsPage() {
       {/* Compatible occupations */}
       <Reveal>
         <section>
-          <h2 className="text-xl font-bold text-ocean">Profissões mais compatíveis com seu perfil</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h2 className="text-xl font-bold text-white">Profissões mais compatíveis com seu perfil</h2>
+          <p className="mt-1 text-sm text-white/80">
             {occupations.length} profissões ordenadas por compatibilidade com seus interesses.
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -182,7 +183,7 @@ export default async function VocationalTestResultsPage() {
       {/* Compatible courses */}
       <Reveal>
         <section>
-          <h2 className="text-xl font-bold text-ocean">Qualificações compatíveis</h2>
+          <h2 className="text-xl font-bold text-white">Qualificações compatíveis</h2>
           <Tabs defaultValue="graduate" className="mt-4">
             <TabsList>
               <TabsTrigger value="graduate">Graduação</TabsTrigger>
@@ -198,10 +199,10 @@ export default async function VocationalTestResultsPage() {
 
       {/* CTA */}
       <Reveal>
-        <div className="rounded-2xl border border-gold/30 bg-gold/10 p-6 text-center">
-          <Route className="mx-auto h-8 w-8 text-gold-dark" />
-          <h2 className="mt-2 text-xl font-bold text-ocean">Pronto para o próximo passo?</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-white/15 bg-white/10 p-6 text-center text-white shadow-sm backdrop-blur-sm">
+          <Route className="mx-auto h-8 w-8 text-gold" />
+          <h2 className="mt-2 text-xl font-bold text-white">Pronto para o próximo passo?</h2>
+          <p className="mt-1 text-sm text-white/80">
             Use seu perfil para montar um plano de carreira personalizado.
           </p>
           <Button asChild className="mt-4 bg-gold text-ocean hover:bg-gold-dark hover:text-white">
@@ -212,12 +213,13 @@ export default async function VocationalTestResultsPage() {
         </div>
       </Reveal>
     </PageContainer>
+    </div>
   );
 }
 
 function CourseList({ courses }: { courses: CourseLite[] }) {
   if (courses.length === 0) {
-    return <p className="py-6 text-center text-sm text-muted-foreground">Nenhum curso encontrado para este perfil.</p>;
+    return <p className="py-6 text-center text-sm text-white/80">Nenhum curso encontrado para este perfil.</p>;
   }
   return (
     <ul className="mt-4 grid gap-2 sm:grid-cols-2">

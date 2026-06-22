@@ -99,10 +99,10 @@ export function Questionnaire() {
     <PageContainer className="max-w-2xl">
       <div className="mb-6">
         <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="font-semibold text-ocean">Plano de Carreira</span>
-          <span className="text-muted-foreground">Passo {step + 1}/{total}</span>
+          <span className="font-semibold text-white">Plano de Carreira</span>
+          <span className="text-white/70">Passo {step + 1}/{total}</span>
         </div>
-        <Progress value={((step + 1) / total) * 100} className="h-2" />
+        <Progress value={((step + 1) / total) * 100} className="h-2 bg-white/20" indicatorClassName="bg-gold" />
       </div>
 
       <div className="rounded-2xl border border-border bg-white/80 p-6 shadow-sm backdrop-blur-sm sm:p-8">
@@ -141,7 +141,7 @@ export function Questionnaire() {
           variant="outline"
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           disabled={step === 0}
-          className="border-ocean/30 text-ocean hover:bg-ocean/5"
+          className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" /> Voltar
         </Button>

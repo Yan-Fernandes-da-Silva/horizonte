@@ -51,6 +51,21 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         (token as { id?: string }).id = (user as { id?: string }).id;
       }
+      // Keep the token in sync with the latest profile data so edits on the
+      // profile page (name / e-mail / avatar) show up after a refresh without
+      // requiring the user to log in again.
+      const id = (token as { id?: string }).id;
+      if (id) {
+        const fresh = await db.user.findUnique({
+          where: { id },
+          select: { name: true, email: true, avatar: true },
+        });
+        if (fresh) {
+          token.name = fresh.name;
+          token.email = fresh.email;
+          token.picture = fresh.avatar ?? null;
+        }
+      }
       return token;
     },
     async session({ session, token }) {

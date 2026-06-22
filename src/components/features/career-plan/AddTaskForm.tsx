@@ -39,7 +39,7 @@ export function AddTaskForm({ planId, category }: { planId: string; category: st
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-border py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-sky/50 hover:text-sky"
+        className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-white/30 bg-white/5 py-2.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/10 hover:text-white"
       >
         <Plus className="h-4 w-4" /> Adicionar tarefa
       </button>

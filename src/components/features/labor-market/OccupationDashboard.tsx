@@ -38,26 +38,31 @@ export function OccupationDashboard({ data, region, uf }: Props) {
   const onSelectRegion = (r: string) => update({ region: r || null, uf: null });
   const onSelectUf = (u: string) => update({ uf: u || null });
 
+  // One glass panel: filters on top, tabs below.
+  const triggerCls =
+    "text-white/70 data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=active]:shadow-none";
+
   return (
     <div>
-      <FilterBar region={region} uf={uf} onRegionChange={(r) => onSelectRegion(r)} onUfChange={(u) => onSelectUf(u)} />
-
-      <Tabs defaultValue="overview" className="mt-5">
-        <TabsList className="flex-wrap">
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="market">Mercado</TabsTrigger>
-          <TabsTrigger value="salary">Remuneração</TabsTrigger>
-          <TabsTrigger value="profile">Perfil</TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="overview">
+        <div className="flex flex-col gap-3 rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm backdrop-blur-sm">
+          <FilterBar region={region} uf={uf} onRegionChange={(r) => onSelectRegion(r)} onUfChange={(u) => onSelectUf(u)} />
+          <TabsList className="w-full flex-wrap justify-center bg-white/10">
+            <TabsTrigger value="overview" className={triggerCls}>Resumo</TabsTrigger>
+            <TabsTrigger value="market" className={triggerCls}>Mercado</TabsTrigger>
+            <TabsTrigger value="salary" className={triggerCls}>Remuneração</TabsTrigger>
+            <TabsTrigger value="profile" className={triggerCls}>Perfil</TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="overview" className="mt-4">
           <OverviewTab data={data} />
         </TabsContent>
         <TabsContent value="market" className="mt-4">
-          <MarketTab market={data.market} selectedUf={uf} onSelectUf={onSelectUf} onSelectRegion={onSelectRegion} />
+          <MarketTab market={data.market} selectedRegion={region} selectedUf={uf} onSelectUf={onSelectUf} onSelectRegion={onSelectRegion} />
         </TabsContent>
         <TabsContent value="salary" className="mt-4">
-          <SalaryTab salary={data.salary} selectedUf={uf} onSelectUf={onSelectUf} onSelectRegion={onSelectRegion} />
+          <SalaryTab salary={data.salary} selectedRegion={region} selectedUf={uf} onSelectUf={onSelectUf} onSelectRegion={onSelectRegion} />
         </TabsContent>
         <TabsContent value="profile" className="mt-4">
           <ProfileTab profile={data.profile} />

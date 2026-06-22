@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
 
 interface RevealProps {
   children: React.ReactNode;
@@ -13,9 +13,15 @@ interface RevealProps {
 /**
  * Fades its children up into view the first time they enter the viewport.
  * Honors the user's "reduce motion" preference by rendering statically.
+ *
+ * Uses the `useInView` hook (IntersectionObserver) instead of `whileInView`:
+ * the observer attaches after hydration, so the reveal fires reliably on the
+ * very first page load — `whileInView` could silently miss it on SSR.
  */
 export function Reveal({ children, className, delay = 0 }: RevealProps) {
   const shouldReduceMotion = useReducedMotion();
+  const ref = React.useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   if (shouldReduceMotion) {
     return <div className={className}>{children}</div>;
@@ -32,11 +38,11 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
 
   return (
     <motion.div
+      ref={ref}
       className={className}
       variants={variants}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
+      animate={inView ? "visible" : "hidden"}
     >
       {children}
     </motion.div>

@@ -9,16 +9,15 @@ import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import { LoginSchema, type LoginInput } from "@/lib/validations/auth";
+import { AuthBrand } from "@/components/shared/AuthBrand";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 function LoginForm() {
@@ -54,10 +53,9 @@ function LoginForm() {
   }
 
   return (
-    <Card className="border-white/20 bg-white/95 shadow-2xl backdrop-blur">
+    <Card className="mx-auto max-w-sm border-white/20 bg-white/95 shadow-2xl backdrop-blur">
       <CardHeader>
-        <CardTitle className="text-2xl text-ocean">Bem-vindo de volta</CardTitle>
-        <CardDescription>Entre na sua conta para continuar.</CardDescription>
+        <AuthBrand />
       </CardHeader>
       <CardContent>
         {justRegistered && (
@@ -77,7 +75,7 @@ function LoginForm() {
               id="email"
               type="email"
               autoComplete="email"
-              placeholder="voce@exemplo.com"
+              placeholder="joao@dominio.com"
               {...register("email")}
             />
             {errors.email && (
@@ -91,6 +89,7 @@ function LoginForm() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
+                placeholder="Digite a senha"
                 className="pr-10"
                 {...register("password")}
               />
@@ -152,10 +151,9 @@ function LoginForm() {
 
 function LoginFallback() {
   return (
-    <Card className="border-white/20 bg-white/95 shadow-2xl backdrop-blur">
+    <Card className="mx-auto max-w-sm border-white/20 bg-white/95 shadow-2xl backdrop-blur">
       <CardHeader>
-        <CardTitle className="text-2xl text-ocean">Bem-vindo de volta</CardTitle>
-        <CardDescription>Entre na sua conta para continuar.</CardDescription>
+        <AuthBrand />
       </CardHeader>
       <CardContent className="flex justify-center py-8">
         <Loader2 className="h-6 w-6 animate-spin text-sky" />

@@ -4,12 +4,10 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { PageContainer } from "@/components/shared/PageContainer";
-import { Reveal } from "@/components/shared/Reveal";
 import { WelcomeBanner } from "@/components/features/home/WelcomeBanner";
 import { VocationalCard } from "@/components/features/home/VocationalCard";
 import { LaborMarketCard } from "@/components/features/home/LaborMarketCard";
 import { CareerPlanCard } from "@/components/features/home/CareerPlanCard";
-import { DailyTip } from "@/components/features/home/DailyTip";
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -33,31 +31,25 @@ export default async function HomePage() {
     db.careerPlan.findFirst({
       where: { userId, status: "active" },
       orderBy: { updatedAt: "desc" },
-      include: { tasks: true },
+      include: { occupation: { select: { title: true } } },
     }),
   ]);
 
   return (
-    <PageContainer className="space-y-8">
-      <Reveal>
+    // Single sea-tone background that fills the space between the header and
+    // footer (full-bleed over the layout's vertical padding). Using flex-1 lets
+    // it grow to fill the viewport without pushing the footer off-screen, so the
+    // welcome box and cards float on it and the footer stays on the same screen.
+    <div className="-my-8 flex-1 bg-sea-top py-8">
+      <PageContainer className="space-y-8">
         <WelcomeBanner name={session.user.name ?? "Usuário"} />
-      </Reveal>
 
-      <div className="grid items-stretch gap-6 md:grid-cols-3">
-        <Reveal className="h-full" delay={0}>
+        <div className="grid items-stretch gap-6 md:grid-cols-3">
           <VocationalCard session={vocationalSession} />
-        </Reveal>
-        <Reveal className="h-full" delay={0.1}>
           <LaborMarketCard favorites={favoriteProfessions} />
-        </Reveal>
-        <Reveal className="h-full" delay={0.2}>
           <CareerPlanCard plan={careerPlan} />
-        </Reveal>
-      </div>
-
-      <Reveal>
-        <DailyTip />
-      </Reveal>
-    </PageContainer>
+        </div>
+      </PageContainer>
+    </div>
   );
 }

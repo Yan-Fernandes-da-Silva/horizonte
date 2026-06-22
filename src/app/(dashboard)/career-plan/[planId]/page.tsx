@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import {
-  ArrowLeft, Award, BriefcaseBusiness, Flag, Globe, Lightbulb, MapPin, Trophy, Users,
+  Award, BriefcaseBusiness, Flag, Globe, Lightbulb, MapPin, Trophy, Users,
 } from "lucide-react";
 
 import { getServerSession } from "next-auth";
@@ -42,12 +41,10 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
   ];
 
   return (
+    <div className="-my-8 flex-1 bg-sea-top py-8">
     <PageContainer className="max-w-4xl space-y-6">
       <div>
-        <Link href="/career-plan" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-sky">
-          <ArrowLeft className="h-4 w-4" /> Meus planos
-        </Link>
-        <h1 className="mt-2 text-2xl font-bold text-ocean sm:text-3xl">{plan.title}</h1>
+        <h1 className="text-2xl font-bold text-white sm:text-3xl">{plan.title}</h1>
       </div>
 
       {roadmap && (
@@ -87,8 +84,8 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
         const sectionTasks = tasks.filter((t) => t.category === section.key);
         return (
           <section key={section.key}>
-            <h2 className="mb-3 flex items-baseline gap-2 text-lg font-bold text-ocean">
-              {section.label} <span className="text-xs font-normal text-muted-foreground">{section.hint}</span>
+            <h2 className="mb-3 flex items-baseline gap-2 text-lg font-bold text-white">
+              {section.label} <span className="text-xs font-normal text-white/70">{section.hint}</span>
             </h2>
             <div className="space-y-2">
               {sectionTasks.map((t) => (
@@ -104,7 +101,7 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
         <>
           {/* Learning trails */}
           <section>
-            <h2 className="mb-3 text-lg font-bold text-ocean">Trilhas de Aprendizado</h2>
+            <h2 className="mb-3 text-lg font-bold text-white">Trilhas de Aprendizado</h2>
             <Tabs defaultValue="courses" className="rounded-2xl border border-border bg-white/70 p-4">
               <TabsList className="flex-wrap">
                 <TabsTrigger value="courses">Cursos</TabsTrigger>
@@ -128,7 +125,7 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
 
           {/* Strategic recommendations */}
           <section>
-            <h2 className="mb-3 text-lg font-bold text-ocean">Recomendações Estratégicas</h2>
+            <h2 className="mb-3 text-lg font-bold text-white">Recomendações Estratégicas</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {[
                 { icon: Users, title: "Networking", text: roadmap.recommendations.networking },
@@ -147,10 +144,10 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
           {/* Future careers */}
           {roadmap.futureCareers.length > 0 && (
             <section>
-              <h2 className="mb-3 text-lg font-bold text-ocean">Cargos Futuros Possíveis</h2>
+              <h2 className="mb-3 text-lg font-bold text-white">Cargos Futuros Possíveis</h2>
               <div className="flex flex-wrap gap-2">
                 {roadmap.futureCareers.map((c) => (
-                  <Badge key={c} className="bg-ocean/10 text-ocean hover:bg-ocean/10">{c}</Badge>
+                  <Badge key={c} className="bg-white/15 text-white hover:bg-white/15">{c}</Badge>
                 ))}
               </div>
             </section>
@@ -158,5 +155,6 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
         </>
       )}
     </PageContainer>
+    </div>
   );
 }

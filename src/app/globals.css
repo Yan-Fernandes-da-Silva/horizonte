@@ -108,6 +108,38 @@
   }
 }
 
+/* Clouds slowly drifting sideways */
+@keyframes horizonte-drift {
+  from {
+    transform: translateX(-8%);
+  }
+  to {
+    transform: translateX(8%);
+  }
+}
+
+/* Gentle horizontal sway for sea waves */
+@keyframes horizonte-sway {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-24px);
+  }
+}
+
+/* A ship bobbing along its route */
+@keyframes horizonte-sail {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
 @layer utilities {
   /* Ocean → sky natural gradient (static) */
   .bg-ocean-gradient {
@@ -132,12 +164,56 @@
   .animate-float {
     animation: horizonte-float 7s ease-in-out infinite;
   }
+  .animate-drift {
+    animation: horizonte-drift 18s ease-in-out infinite alternate;
+  }
+  .animate-sway {
+    animation: horizonte-sway 9s ease-in-out infinite;
+  }
+  .animate-sail {
+    animation: horizonte-sail 6s ease-in-out infinite;
+  }
+
+  /* ── Nautical scene backgrounds (flat, code-drawn) ─────────────────── */
+
+  /* Sunny sky → soft cyan (Hero) */
+  .bg-sky-day {
+    background-image: linear-gradient(180deg, #5ec5e8 0%, #8ad4ec 45%, #bfe9f5 100%);
+  }
+  /* Deep sea, seen toward the horizon (About) */
+  .bg-sea {
+    background-image: linear-gradient(180deg, #0e6ba8 0%, #0a4f86 60%, #073a66 100%);
+  }
+  /* Sea seen from above (How it works) */
+  .bg-sea-top {
+    background-image: linear-gradient(180deg, #0a4f86 0%, #0e6ba8 50%, #1283c4 100%);
+  }
+  /* Beach sand with a subtle grain texture (Features) */
+  .bg-beach {
+    background-color: #e9d8b4;
+    background-image:
+      radial-gradient(rgba(139, 90, 43, 0.06) 1px, transparent 1px),
+      radial-gradient(rgba(139, 90, 43, 0.05) 1px, transparent 1px);
+    background-size: 7px 7px, 11px 11px;
+    background-position: 0 0, 4px 5px;
+  }
+  /* Coastal city at dusk seen from the sea (Final CTA) */
+  .bg-coast-city {
+    background-image: linear-gradient(180deg, #f7c59f 0%, #e98a7d 28%, #5b7fa6 55%, #0e6ba8 78%, #0a4f86 100%);
+  }
+  /* Night sea by a lighthouse (auth pages) */
+  .bg-night-sea {
+    background-image: linear-gradient(180deg, #081a35 0%, #0a2342 45%, #0c3357 75%, #0e4774 100%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .bg-ocean-gradient-animated,
   .animate-wave,
-  .animate-float {
+  .animate-float,
+  .animate-drift,
+  .animate-sway,
+  .animate-sail {
     animation: none;
   }
 }

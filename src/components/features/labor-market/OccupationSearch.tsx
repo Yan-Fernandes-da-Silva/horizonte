@@ -14,6 +14,7 @@ interface Hit {
 /** Debounced autocomplete over CBO occupations; selecting one opens its dashboard. */
 export function OccupationSearch() {
   const router = useRouter();
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const [query, setQuery] = React.useState("");
   const [hits, setHits] = React.useState<Hit[]>([]);
   const [loading, setLoading] = React.useState(false);
@@ -41,13 +42,25 @@ export function OccupationSearch() {
     return () => clearTimeout(t);
   }, [query]);
 
+  // Hide the suggestions when the user clicks anywhere outside the search box;
+  // focusing the input again reopens them (handled by onFocus).
+  React.useEffect(() => {
+    function onDocMouseDown(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, []);
+
   const go = (code: string) => {
     setOpen(false);
     router.push(`/labor-market/${code}`);
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={containerRef}>
       <div className="relative">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -55,10 +68,14 @@ export function OccupationSearch() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => hits.length && setOpen(true)}
           placeholder="Ex: Analista de sistemas, Enfermeiro, Pedreiro..."
-          className="h-12 pl-11 pr-10 text-base"
+          className="h-12 pl-11 pr-10 text-base text-ocean"
         />
         {loading && (
-          <Loader2 className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 animate-spin text-sky" />
+          // The wrapper holds the vertical centering (static) so the spinning
+          // icon rotates in place instead of jumping as `animate-spin` runs.
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+            <Loader2 className="h-5 w-5 animate-spin text-sky" />
+          </span>
         )}
       </div>
 

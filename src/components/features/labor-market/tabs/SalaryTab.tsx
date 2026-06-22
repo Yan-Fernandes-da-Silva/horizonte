@@ -3,28 +3,32 @@
 import { fmtBRL, fmtBRL2 } from "@/lib/labor-market/format";
 import type { SalaryView } from "@/lib/labor-market/types";
 import { MetricCard } from "../MetricCard";
-import { BrazilTileMap } from "../BrazilTileMap";
+import { BrazilMap } from "../BrazilMap";
 import { SalaryTable } from "../SalaryTable";
 
 interface Props {
   salary: SalaryView;
+  selectedRegion: string;
   selectedUf: string;
   onSelectUf: (uf: string) => void;
   onSelectRegion: (region: string) => void;
 }
 
-export function SalaryTab({ salary, selectedUf, onSelectUf, onSelectRegion }: Props) {
+const STRONG = "text-white";
+
+export function SalaryTab({ salary, selectedRegion, selectedUf, onSelectUf, onSelectRegion }: Props) {
+  // Hide the per-state table when a single state is already in focus.
+  const showByState = !selectedUf;
+
   return (
     <div className="grid gap-4 lg:grid-cols-5">
       <div className="lg:col-span-2">
-        <MetricCard title="Mapa do Brasil — salário por estado">
-          <BrazilTileMap
-            byState={salary.byState.map((s) => ({
-              uf: s.uf, region: "", admissions: 0, dismissals: 0, balance: 0,
-              avgSalary: s.avgSalary, stockTotal: 0,
-            }))}
+        <MetricCard>
+          <BrazilMap
+            values={salary.byState.map((s) => ({ uf: s.uf, value: s.avgSalary }))}
+            scheme="salary"
+            selectedRegion={selectedRegion}
             selectedUf={selectedUf}
-            metric="salary"
             onSelectUf={onSelectUf}
             onSelectRegion={onSelectRegion}
           />
@@ -33,21 +37,24 @@ export function SalaryTab({ salary, selectedUf, onSelectUf, onSelectRegion }: Pr
 
       <div className="space-y-4 lg:col-span-3">
         <div className="grid grid-cols-3 gap-3">
-          <MetricCard title="Salário médio">
-            <p className="text-2xl font-bold text-ocean">{fmtBRL(salary.avgSalary)}</p>
-            <p className="text-xs text-muted-foreground">{fmtBRL2(salary.hourlyRate)}/hora</p>
+          <MetricCard title="Salário médio" titleClassName={STRONG}>
+            <p className="text-2xl font-bold text-white">{fmtBRL(salary.avgSalary)}</p>
+            <p className="text-xs text-white/70">{fmtBRL2(salary.hourlyRate)}/hora</p>
           </MetricCard>
-          <MetricCard title="Horas/semana">
-            <p className="text-2xl font-bold text-ocean">{salary.avgWeeklyHours ?? "—"}h</p>
+          <MetricCard title="Horas contratuais" titleClassName={STRONG}>
+            <p className="text-2xl font-bold text-white">{salary.avgWeeklyHours ?? "—"}h</p>
+            <p className="text-xs text-white/70">Horas por semana</p>
           </MetricCard>
-          <MetricCard title="Duração média">
-            <p className="text-2xl font-bold text-ocean">{salary.avgTenureMonths ?? "—"}</p>
-            <p className="text-xs text-muted-foreground">meses</p>
+          <MetricCard title="Duração contratual média" titleClassName={STRONG}>
+            <p className="text-2xl font-bold text-white">{salary.avgTenureMonths ?? "—"}</p>
+            <p className="text-xs text-white/70">meses</p>
           </MetricCard>
         </div>
-        <MetricCard title="Salário por estado">
-          <SalaryTable rows={salary.byState} weeklyHours={salary.avgWeeklyHours} />
-        </MetricCard>
+        {showByState && (
+          <MetricCard>
+            <SalaryTable rows={salary.byState} weeklyHours={salary.avgWeeklyHours} />
+          </MetricCard>
+        )}
       </div>
     </div>
   );

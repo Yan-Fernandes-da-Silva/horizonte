@@ -75,6 +75,13 @@ const config: Config = {
         sand: {
           DEFAULT: "#FAF5EB",
           dark: "#F0E6C8",
+          beach: "#E9D8B4",
+        },
+        // Ship's-wheel wood — brand mark (logo) color
+        helm: {
+          DEFAULT: "#8B5A2B",
+          light: "#A9743F",
+          dark: "#6B4423",
         },
       },
       borderRadius: {

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Farol">
+  <circle cx="100" cy="100" r="100" fill="#F4A261"/>
+  <polygon points="86,56 114,56 100,42" fill="#0A2342"/>
+  <rect x="90" y="56" width="20" height="18" fill="#ffffff"/>
+  <rect x="86" y="74" width="28" height="76" fill="#0A2342"/>
+  <rect x="84" y="96" width="32" height="14" fill="#ffffff"/>
+  <rect x="78" y="150" width="44" height="9" rx="2" fill="#0A2342"/>
+</svg>

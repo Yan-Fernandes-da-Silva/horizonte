@@ -9,6 +9,24 @@ export const fmtBRL = (v: number | null | undefined) => (v == null ? "—" : BRL
 export const fmtBRL2 = (v: number | null | undefined) => (v == null ? "—" : BRL2.format(v));
 export const fmtNum = (v: number | null | undefined) => (v == null ? "—" : NUM.format(v));
 
+/**
+ * Monochromatic ocean spectrum (light sky → deep ocean/header color), t in [0,1].
+ * Used to color maps and profile charts as a single-hue scale.
+ */
+export function oceanColor(t: number): string {
+  const a = [144, 224, 239]; // #90E0EF (light)
+  const b = [10, 35, 66]; // #0A2342 (ocean — header/footer)
+  const k = Math.max(0, Math.min(1, t));
+  const c = a.map((x, i) => Math.round(x + (b[i] - x) * k));
+  return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+}
+
+/** N evenly-spaced colors along the ocean spectrum (for categorical charts). */
+export function oceanShades(n: number): string[] {
+  if (n <= 1) return [oceanColor(0.5)];
+  return Array.from({ length: n }, (_, i) => oceanColor(i / (n - 1)));
+}
+
 /** Approx. hourly rate from a monthly salary and weekly hours (4.33 weeks/month). */
 export function hourlyRate(monthly: number | null, weeklyHours: number | null): number | null {
   if (!monthly || !weeklyHours) return null;
@@ -18,18 +36,28 @@ export function hourlyRate(monthly: number | null, weeklyHours: number | null): 
 // Ordered scales used by the gauge and badges.
 export const SITUATION_STEPS: MarketSituation[] = ["Queda", "Retração", "Equilibrado", "Crescendo", "Aquecido"];
 
+// Situation scale, left→right: red → orange → yellow → light green → dark green.
 export const SITUATION_COLOR: Record<MarketSituation, string> = {
-  Queda: "#E76F51",
-  Retração: "#F4A261",
-  Equilibrado: "#64748B",
-  Crescendo: "#00B4D8",
-  Aquecido: "#10B981",
+  Queda: "#DC2626",
+  Retração: "#F97316",
+  Equilibrado: "#EAB308",
+  Crescendo: "#4ADE80",
+  Aquecido: "#16A34A",
 };
 
+// Strong green / yellow / red for the level badges.
 export const LEVEL_COLOR: Record<Level, string> = {
-  Alta: "#E76F51",
-  Moderada: "#F4A261",
-  Baixa: "#10B981",
+  Alta: "#DC2626",
+  Moderada: "#EAB308",
+  Baixa: "#16A34A",
+};
+
+export const SITUATION_HINT: Record<MarketSituation, string> = {
+  Queda: "Mais desligamentos do que admissões — mercado encolhendo no período.",
+  Retração: "Saldo levemente negativo: contratações abaixo das saídas.",
+  Equilibrado: "Admissões e desligamentos praticamente em equilíbrio.",
+  Crescendo: "Saldo positivo: mais contratações do que desligamentos.",
+  Aquecido: "Forte saldo positivo — mercado em expansão no período.",
 };
 
 export const ROTATIVIDADE_HINT: Record<Level, string> = {

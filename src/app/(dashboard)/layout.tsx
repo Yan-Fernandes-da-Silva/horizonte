@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import { FavoriteLimitNotice } from "@/components/features/labor-market/FavoriteLimitNotice";
 
 export default async function DashboardLayout({
   children,
@@ -27,9 +28,10 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen flex-col bg-sand/40">
       <Header variant="dashboard" user={user} />
-      <main className="flex-1 py-8">{children}</main>
+      <main className="flex flex-1 flex-col py-8">{children}</main>
       <Footer />
       <Toaster richColors position="top-center" />
+      <FavoriteLimitNotice />
     </div>
   );
 }

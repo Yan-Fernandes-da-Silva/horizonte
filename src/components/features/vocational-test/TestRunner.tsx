@@ -95,16 +95,17 @@ export function TestRunner({ sessionId, section, initialResponses }: Props) {
       : "Próxima seção";
 
   return (
+    <div className="-my-8 flex-1 bg-sea-top py-8">
     <PageContainer className="max-w-2xl py-4">
       {/* Progress header */}
       <div className="mb-6">
         <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="font-semibold text-ocean">
+          <span className="font-semibold text-white">
             Seção {sectionIndex + 1}/{SECTIONS.length}: {SECTIONS[sectionIndex].label}
           </span>
-          <span className="text-muted-foreground">{overallProgress}%</span>
+          <span className="text-white/70">{overallProgress}%</span>
         </div>
-        <Progress value={overallProgress} className="h-2" />
+        <Progress value={overallProgress} className="h-2 bg-white/20" indicatorClassName="bg-gold" />
       </div>
 
       {/* Question card */}
@@ -142,7 +143,7 @@ export function TestRunner({ sessionId, section, initialResponses }: Props) {
           variant="outline"
           onClick={goPrev}
           disabled={index === 0 && sectionIndex === 0}
-          className="border-ocean/30 text-ocean hover:bg-ocean/5"
+          className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" /> Anterior
         </Button>
@@ -157,5 +158,6 @@ export function TestRunner({ sessionId, section, initialResponses }: Props) {
         </Button>
       </div>
     </PageContainer>
+    </div>
   );
 }

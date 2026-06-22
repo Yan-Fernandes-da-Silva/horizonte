@@ -2,12 +2,22 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 import { Logo } from "@/components/shared/Logo";
 import { PageContainer } from "@/components/shared/PageContainer";
 import { Button } from "@/components/ui/button";
-import { WaveDivider } from "./WaveDivider";
+
+/** A flat, fluffy cloud drawn from overlapping shapes. */
+function Cloud({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 60" fill="currentColor" aria-hidden className={className}>
+      <ellipse cx="42" cy="42" rx="32" ry="17" />
+      <circle cx="58" cy="30" r="22" />
+      <circle cx="84" cy="38" r="17" />
+      <rect x="34" y="38" width="62" height="15" rx="7.5" />
+    </svg>
+  );
+}
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -22,34 +32,17 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-ocean-gradient-animated">
-      {/* Decorative nautical map grid */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
-          backgroundSize: "52px 52px",
-        }}
-      />
-      {/* Faint compass rings */}
-      <svg
-        aria-hidden
-        viewBox="0 0 200 200"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1}
-        className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 text-sky-light opacity-10 sm:h-96 sm:w-96"
-      >
-        <circle cx="100" cy="100" r="90" />
-        <circle cx="100" cy="100" r="64" />
-        <circle cx="100" cy="100" r="38" />
-        <line x1="100" y1="0" x2="100" y2="200" />
-        <line x1="0" y1="100" x2="200" y2="100" />
-      </svg>
+    <section className="relative flex min-h-screen flex-col overflow-hidden bg-sky-day">
+      {/* Drifting clouds — pushed to the sides so they clear the centred content,
+          with varied sizes/positions so the two sides don't mirror each other. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 text-white">
+        <Cloud className="absolute left-[1%] top-[10%] w-36 opacity-90 animate-drift sm:w-52" />
+        <Cloud className="absolute left-[3%] top-[64%] w-24 opacity-70 animate-drift sm:w-32" />
+        <Cloud className="absolute right-[2%] top-[26%] w-44 opacity-85 animate-drift sm:w-60" />
+        <Cloud className="absolute right-[7%] top-[74%] w-20 opacity-65 animate-drift sm:w-28" />
+      </div>
 
-      <PageContainer className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-24 text-center text-white">
+      <PageContainer className="relative flex flex-1 flex-col items-center justify-center py-24 text-center text-white">
         <motion.div
           variants={container}
           initial="hidden"
@@ -57,47 +50,42 @@ export function HeroSection() {
           className="flex flex-col items-center"
         >
           <motion.div variants={item}>
-            <Logo className="h-16 w-16 animate-float text-gold sm:h-20 sm:w-20" />
+            <Logo className="h-24 w-24 animate-float text-helm drop-shadow-md sm:h-28 sm:w-28" />
           </motion.div>
           <motion.h1
             variants={item}
-            className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
+            className="mt-6 text-5xl font-bold tracking-tight text-white drop-shadow sm:text-6xl lg:text-7xl"
           >
             Horizonte
           </motion.h1>
           <motion.p
             variants={item}
-            className="mt-4 max-w-xl text-lg text-sky-lighter sm:text-xl"
+            className="mt-4 max-w-xl text-lg font-medium text-white drop-shadow sm:text-xl"
           >
             Acompanhamento inteligente da sua carreira profissional.
           </motion.p>
           <motion.div
             variants={item}
-            className="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
+            className="mt-10 flex flex-col items-center gap-3 sm:flex-row"
           >
             <Button
               asChild
               size="lg"
-              className="group bg-gold text-ocean hover:bg-gold-dark hover:text-white"
+              className="bg-gold px-8 text-ocean shadow-md hover:bg-gold-dark hover:text-white"
             >
-              <Link href="/register">
-                Começar agora
-                <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
-              </Link>
+              <Link href="/register">Começar agora</Link>
             </Button>
             <Button
               asChild
               size="lg"
               variant="outline"
-              className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
+              className="border-ocean/30 bg-white/50 px-8 text-ocean backdrop-blur-sm hover:bg-white/70 hover:text-ocean"
             >
               <Link href="/login">Já tenho conta</Link>
             </Button>
           </motion.div>
         </motion.div>
       </PageContainer>
-
-      <WaveDivider />
     </section>
   );
 }

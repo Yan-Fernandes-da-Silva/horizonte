@@ -8,5 +8,9 @@ export default async function CareerPlanStartPage() {
   const session = await getServerSession(authOptions);
   if (!(session?.user as { id?: string } | undefined)?.id) redirect("/login");
 
-  return <Questionnaire />;
+  return (
+    <div className="-my-8 flex-1 bg-sea-top py-8">
+      <Questionnaire />
+    </div>
+  );
 }

@@ -10,6 +10,7 @@ import {
   ForgotPasswordSchema,
   type ForgotPasswordInput,
 } from "@/lib/validations/auth";
+import { AuthBrand } from "@/components/shared/AuthBrand";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,7 +20,6 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 export default function ForgotPasswordPage() {
@@ -41,8 +41,8 @@ export default function ForgotPasswordPage() {
   return (
     <Card className="border-white/20 bg-white/95 shadow-2xl backdrop-blur">
       <CardHeader>
-        <CardTitle className="text-2xl text-ocean">Recuperar senha</CardTitle>
-        <CardDescription>
+        <AuthBrand />
+        <CardDescription className="text-2xl leading-snug text-ocean">
           Informe seu e-mail e enviaremos as instruções de recuperação.
         </CardDescription>
       </CardHeader>
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
                 id="email"
                 type="email"
                 autoComplete="email"
-                placeholder="voce@exemplo.com"
+                placeholder="joao@dominio.com"
                 {...register("email")}
               />
               {errors.email && (

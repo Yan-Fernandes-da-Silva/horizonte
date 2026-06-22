@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Veleiro">
+  <circle cx="100" cy="100" r="100" fill="#E76F51"/>
+  <line x1="100" y1="56" x2="100" y2="128" stroke="#ffffff" stroke-width="5"/>
+  <path d="M100 60 L100 124 L62 124 Z" fill="#0A2342"/>
+  <path d="M108 72 L108 124 L140 124 Z" fill="#ffffff"/>
+  <path d="M58 130 L142 130 L126 152 L74 152 Z" fill="#ffffff"/>
+</svg>
