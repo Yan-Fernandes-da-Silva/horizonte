@@ -14,7 +14,9 @@ interface Props {
   onSelectRegion: (region: string) => void;
 }
 
-const STRONG = "text-white";
+// Fixed-height title so the big value and the small caption line up across
+// the three cards even when a title wraps to a second line.
+const STRONG = "text-white min-h-[2.5rem] items-start";
 
 export function SalaryTab({ salary, selectedRegion, selectedUf, onSelectUf, onSelectRegion }: Props) {
   // Hide the per-state table when a single state is already in focus.
@@ -45,7 +47,7 @@ export function SalaryTab({ salary, selectedRegion, selectedUf, onSelectUf, onSe
             <p className="text-2xl font-bold text-white">{salary.avgWeeklyHours ?? "—"}h</p>
             <p className="text-xs text-white/70">Horas por semana</p>
           </MetricCard>
-          <MetricCard title="Duração contratual média" titleClassName={STRONG}>
+          <MetricCard title="Duração média" titleClassName={STRONG}>
             <p className="text-2xl font-bold text-white">{salary.avgTenureMonths ?? "—"}</p>
             <p className="text-xs text-white/70">meses</p>
           </MetricCard>

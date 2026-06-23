@@ -40,7 +40,7 @@ export function FavoriteButton({ occupationCode, initialFavorited = false, varia
       }
       if (!res.ok) throw new Error();
       setFavorited(Boolean(data.favorited));
-      toast.success(data.favorited ? "Profissão favoritada!" : "Removida dos favoritos.");
+      // No success toast here — the heart state already reflects the change.
     } catch {
       toast.error("Não foi possível atualizar o favorito.");
     } finally {

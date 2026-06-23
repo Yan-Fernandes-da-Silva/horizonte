@@ -79,7 +79,9 @@ export function BrazilMap({
     const [[x0, y0], [x1, y1]] = geoBounds(fc as never);
     const spanLon = Math.max(0.5, x1 - x0);
     const spanLat = Math.max(0.5, y1 - y0);
-    const zoom = Math.min(16, Math.max(3.2, 1.3 * Math.min(40 / spanLon, 40 / spanLat)));
+    // Lower factor + floor than before so the region/state always fits with a
+    // margin instead of being cropped at the edges.
+    const zoom = Math.min(14, Math.max(1.2, 0.9 * Math.min(40 / spanLon, 40 / spanLat)));
     return { center, zoom };
   }, [geo, selectedRegion, selectedUf]);
 

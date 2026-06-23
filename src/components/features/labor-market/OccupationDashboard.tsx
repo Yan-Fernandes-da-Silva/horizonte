@@ -49,7 +49,7 @@ export function OccupationDashboard({ data, region, uf }: Props) {
           <FilterBar region={region} uf={uf} onRegionChange={(r) => onSelectRegion(r)} onUfChange={(u) => onSelectUf(u)} />
           <TabsList className="w-full flex-wrap justify-center bg-white/10">
             <TabsTrigger value="overview" className={triggerCls}>Resumo</TabsTrigger>
-            <TabsTrigger value="market" className={triggerCls}>Mercado</TabsTrigger>
+            <TabsTrigger value="market" className={triggerCls}>Demanda</TabsTrigger>
             <TabsTrigger value="salary" className={triggerCls}>Remuneração</TabsTrigger>
             <TabsTrigger value="profile" className={triggerCls}>Perfil</TabsTrigger>
           </TabsList>

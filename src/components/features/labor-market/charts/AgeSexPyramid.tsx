@@ -4,7 +4,6 @@ import {
   Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
-import { oceanColor } from "@/lib/labor-market/format";
 import type { Distribution } from "@/lib/labor-market/types";
 
 interface Props {
@@ -12,8 +11,9 @@ interface Props {
   sex: Distribution[];
 }
 
-const MALE = oceanColor(0.85);
-const FEMALE = oceanColor(0.3);
+// Map cyan (sky) + header/footer dark blue (ocean) — same hues used elsewhere.
+const MALE = "#0A2342"; // ocean — header/footer dark blue
+const FEMALE = "#00B4D8"; // sky — map cyan
 
 /**
  * Age-sex pyramid. RAIS gives age and sex separately, so each age band is split

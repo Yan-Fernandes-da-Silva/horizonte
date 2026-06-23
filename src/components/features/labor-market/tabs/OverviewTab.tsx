@@ -76,7 +76,7 @@ export function OverviewTab({ data }: { data: DashboardData }) {
         <Hint>{CONCORRENCIA_HINT[overview.concorrencia]}</Hint>
       </MetricCard>
 
-      <MetricCard title="Mercado" icon={TrendingUp} titleClassName={STRONG_TITLE}>
+      <MetricCard title="Demanda" icon={TrendingUp} titleClassName={STRONG_TITLE}>
         <Line label="Saldo do período" value={fmtNum(market.balance)} />
         <Line label="Mais admissões" value={overview.topAdmissionState ? UF_NAMES[overview.topAdmissionState] : "—"} />
         <Line label="Mais desligamentos" value={topDismissalState ? UF_NAMES[topDismissalState] : "—"} />

@@ -46,3 +46,9 @@ next-env.d.ts
 /feedbacks/
 /GUIA_DE_FEEDBACK.md
 /GUIA_TESTE_MOBILE.md
+
+# local QA / screenshot scratch (never committed)
+/cdpshot.mjs
+/mapshot_*.png
+/.devlog.txt
+/src/app/mapcheck/
