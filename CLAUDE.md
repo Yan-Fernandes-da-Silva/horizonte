@@ -270,14 +270,16 @@ Market Data (pre-aggregated from CAGED + RAIS) ───────
 | 07    | Vocational Test              | Concluída |
 | 08    | Labor Market                 | Concluída |
 | 09    | Career Plan                  | Concluída |
-| 10    | Deploy                       | Pending |
+| 10    | Deploy                       | Concluída |
 
 ---
 
 ## Current Phase
 
-**Last completed: PHASE 09 — Career Plan** (questionário SMART de 6 passos → roadmap gerado pela API da Claude (`claude-haiku-4-5`, saída estruturada) com fallback sem IA; roadmap editável com CRUD de tarefas, progresso e conquistas. Requer `ANTHROPIC_API_KEY` no `.env.local` para a geração por IA).
+**Todas as 10 fases concluídas.** Site no ar: **https://horizonte-one.vercel.app** (Vercel + Railway).
 
-**→ Next: PHASE 10 — Deploy** (awaiting Yan's approval to start).
+**Last completed: PHASE 10 — Deploy** — app no Vercel (auto-deploy a cada `git push` na `main`), banco PostgreSQL no Railway (schema via `prisma db push`, dados via ETL). Variáveis de produção configuradas (`DATABASE_URL` público, `NEXTAUTH_SECRET`, `NEXTAUTH_URL=https://horizonte-one.vercel.app`). Verificado por teste e2e 18/18 (público, redirecionamentos, cadastro, login, páginas logadas) + 0 erros de console na landing. Detalhes em `docs/decisions/013-phase10-deploy.md`.
 
-To start: ask Yan which phase to execute, then read the corresponding `docs/phases/PHASE_XX_*.md` file.
+> **Pendência opcional:** `ANTHROPIC_API_KEY` ainda não configurada no Vercel → o Plano de Carreira roda em **modo básico (fallback)** até a chave ser adicionada. Passo a passo: `feedbacks/lembrete-chave-ia.md`.
+
+Para mudanças futuras: editar o código → testar em `localhost:3000` → `git push origin main` → o Vercel redeploya sozinho (~2 min).
