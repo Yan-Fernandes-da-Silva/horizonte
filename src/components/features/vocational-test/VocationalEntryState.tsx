@@ -63,8 +63,8 @@ function NotStartedState() {
     <div className="text-center">
       <h2 className="text-xl font-bold text-white">Pronto para começar?</h2>
       <p className="mx-auto mt-2 max-w-md text-sm text-white/80">
-        São 54 perguntas rápidas, divididas em 4 seções. Você pode pausar e continuar
-        depois — suas respostas são salvas automaticamente.
+        São 3 seções rápidas e interativas. Você pode pausar e continuar depois —
+        suas respostas são salvas automaticamente.
       </p>
       <div className="mt-6">
         <StartTestButton className="px-8">Começar teste</StartTestButton>

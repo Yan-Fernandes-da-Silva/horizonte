@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  ClipboardList, FlaskConical, Palette, Presentation, Users, Wrench,
+  ClipboardList, Hammer, HeartHandshake, Megaphone, Microscope, Palette,
   type LucideIcon,
 } from "lucide-react";
 
@@ -16,7 +16,7 @@ interface Props {
 
 // Icon-based environment cards (no photos needed — Yan's choice).
 const ICON_MAP: Record<string, LucideIcon> = {
-  Wrench, FlaskConical, Palette, Users, Presentation, ClipboardList,
+  Hammer, Microscope, Palette, HeartHandshake, Megaphone, ClipboardList,
 };
 
 export function VisualQuestion({ question, value, onChange }: Props) {
@@ -33,19 +33,19 @@ export function VisualQuestion({ question, value, onChange }: Props) {
             className={cn(
               "flex flex-col items-center gap-3 rounded-2xl border-2 p-5 text-center transition-all",
               active
-                ? "border-sky bg-sky/10 text-ocean shadow-md"
-                : "border-border bg-white text-muted-foreground hover:border-sky/40 hover:bg-sky/5"
+                ? "border-sky bg-sky/15 text-white shadow-md"
+                : "border-white/20 bg-white/5 text-white/90 hover:border-sky/40 hover:bg-white/10"
             )}
           >
             <span
               className={cn(
-                "flex h-14 w-14 items-center justify-center rounded-xl transition-colors",
-                active ? "bg-ocean-gradient text-white" : "bg-sand text-ocean"
+                "flex h-14 w-14 items-center justify-center rounded-xl text-gold transition-colors",
+                active ? "bg-gold/20" : "bg-white/10"
               )}
             >
               <Icon className="h-7 w-7" />
             </span>
-            <span className="text-sm font-medium text-ocean">{opt.label}</span>
+            <span className="text-sm font-medium text-white">{opt.label}</span>
           </button>
         );
       })}

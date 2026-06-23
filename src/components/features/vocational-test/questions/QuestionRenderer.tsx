@@ -24,7 +24,9 @@ const REGISTRY = {
 } as const;
 
 export function QuestionRenderer({ question, value, onChange }: Props) {
-  const Component = REGISTRY[question.type];
+  // `tier` is rendered by TierlistRunner, not here — guard against missing types.
+  const Component = REGISTRY[question.type as keyof typeof REGISTRY];
+  if (!Component) return null;
   return <Component question={question} value={value} onChange={onChange} />;
 }
 

@@ -12,13 +12,22 @@ export interface ScoredOccupation {
   score: number;
 }
 
+/**
+ * Interest areas picked by the user. G8 is now a `rank` question (full ordered
+ * list), so we take the top N as the "selected" interests for matching/results.
+ */
+export function selectedInterests(results: TestResults, n = 4): string[] {
+  const arr = results.gopc?.["G8"];
+  return Array.isArray(arr) ? arr.slice(0, n) : [];
+}
+
 /** Top compatible occupations for a result profile (based on top-3 RIASEC + interests). */
 export async function getCompatibleOccupations(
   results: TestResults,
   limit = 24
 ): Promise<ScoredOccupation[]> {
   const topCodes = topRiasecCodes(results.riasec);
-  const interests = (results.gopc?.["G8"] as string[] | undefined) ?? [];
+  const interests = selectedInterests(results);
 
   const occupations = await db.cboOccupation.findMany({
     select: { code: true, title: true, description: true },
@@ -71,7 +80,7 @@ export async function getCompatibleCourses(
   results: TestResults,
   perType = 8
 ): Promise<CompatibleCourses> {
-  const interests = (results.gopc?.["G8"] as string[] | undefined) ?? [];
+  const interests = selectedInterests(results);
   let keywords = interests.flatMap((i) => INTEREST_KEYWORDS[i] ?? []);
   if (keywords.length === 0) {
     keywords = topRiasecCodes(results.riasec, 2).flatMap((t) => RIASEC_KEYWORDS[t]);

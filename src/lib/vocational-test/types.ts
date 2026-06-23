@@ -10,7 +10,8 @@ export type QuestionType =
   | "single_select"
   | "multi_select"
   | "rank"
-  | "visual";
+  | "visual"
+  | "tier";
 
 export type RiasecType = "R" | "I" | "A" | "S" | "E" | "C";
 

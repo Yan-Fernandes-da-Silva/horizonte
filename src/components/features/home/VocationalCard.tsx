@@ -32,7 +32,7 @@ export function VocationalCard({
     const meta = (session.answers ?? {}) as { currentSection?: string };
     const continueHref = meta.currentSection
       ? `/vocational-test/${meta.currentSection}`
-      : "/vocational-test/start";
+      : "/vocational-test";
 
     return (
       <HomeFeatureCard
@@ -52,7 +52,7 @@ export function VocationalCard({
       title="Teste Vocacional"
       state="Responda algumas perguntas"
       support="Descubra quais profissões combinam com você"
-      href="/vocational-test/start"
+      href="/vocational-test"
     />
   );
 }

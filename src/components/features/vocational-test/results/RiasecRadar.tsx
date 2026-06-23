@@ -16,10 +16,10 @@ export function RiasecRadar({ riasec }: { riasec: Record<RiasecType, number> }) 
   return (
     <ResponsiveContainer width="100%" height={320}>
       <RadarChart data={data} outerRadius="70%">
-        <PolarGrid stroke="#E2E8F0" />
-        <PolarAngleAxis dataKey="type" tick={{ fill: "#0A2342", fontSize: 12 }} />
-        <PolarRadiusAxis domain={[0, 100]} tick={{ fill: "#64748B", fontSize: 10 }} />
-        <Radar dataKey="value" stroke="#00B4D8" fill="#00B4D8" fillOpacity={0.35} />
+        <PolarGrid stroke="rgba(255,255,255,0.2)" />
+        <PolarAngleAxis dataKey="type" tick={{ fill: "#FFFFFF", fontSize: 12 }} />
+        <PolarRadiusAxis domain={[0, 100]} tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 10 }} />
+        <Radar dataKey="value" stroke="#00B4D8" fill="#00B4D8" fillOpacity={0.4} />
       </RadarChart>
     </ResponsiveContainer>
   );

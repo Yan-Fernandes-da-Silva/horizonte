@@ -15,13 +15,24 @@ const MI_TYPES: MiType[] = [
 
 const VISUAL_BONUS = 10; // points added to the RIASEC type picked in the visual question
 
-/** Convert a stored answer into a 1..5 point value for likert / like_dislike. */
-function pointValue(value: AnswerValue | undefined): number | null {
+// Scored question types and their max points (the denominator per question).
+//   tier (RIASEC)     → 0..4
+//   like_dislike (MI) → dislike 0 / neutral 1 / like 3
+//   likert (legacy)   → 1..5
+const MAX_POINTS: Record<string, number> = { tier: 4, like_dislike: 3, likert: 5 };
+const SCORED_TYPES = new Set(Object.keys(MAX_POINTS));
+
+/** Convert a stored answer into points, given the question type. */
+function pointValue(value: AnswerValue | undefined, type: string): number | null {
   if (value == null) return null;
+  if (type === "like_dislike") {
+    if (value === "like") return 3;
+    if (value === "neutral") return 1;
+    if (value === "dislike") return 0;
+    return null;
+  }
+  // tier / likert are numeric.
   if (typeof value === "number") return value;
-  if (value === "like") return 5;
-  if (value === "neutral") return 3;
-  if (value === "dislike") return 1;
   const n = parseInt(String(value), 10);
   return Number.isFinite(n) ? n : null;
 }
@@ -35,10 +46,10 @@ function scoreDimension(
   for (const q of QUESTIONS) {
     const dim = keyOf(q.id);
     if (!dim) continue;
-    if (q.type !== "likert" && q.type !== "like_dislike") continue;
+    if (!SCORED_TYPES.has(q.type)) continue;
     const weight = q.weight ?? 1;
-    max[dim] = (max[dim] ?? 0) + 5 * weight;
-    const v = pointValue(responses[q.id]);
+    max[dim] = (max[dim] ?? 0) + MAX_POINTS[q.type] * weight;
+    const v = pointValue(responses[q.id], q.type);
     if (v != null) raw[dim] = (raw[dim] ?? 0) + v * weight;
   }
   const out: Record<string, number> = {};
