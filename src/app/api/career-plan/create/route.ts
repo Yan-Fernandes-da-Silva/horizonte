@@ -15,30 +15,48 @@ export async function POST(req: Request) {
     const userId = await getCurrentUserId();
     if (!userId) return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
 
-    const { answers, fallback } = (await req.json()) as { answers?: SmartAnswers; fallback?: boolean };
+    const { answers, fallback, occupationCode } = (await req.json()) as {
+      answers?: SmartAnswers;
+      fallback?: boolean;
+      occupationCode?: string;
+    };
     if (!answers || typeof answers !== "object") {
       return NextResponse.json({ error: "Respostas inválidas." }, { status: 400 });
     }
 
-    // Enrich the context with the user's vocational profile + a favorited occupation.
-    const [completed, favorite] = await Promise.all([
-      db.vocationalTestSession.findFirst({
-        where: { userId, status: "completed" },
-        orderBy: { completedAt: "desc" },
-        select: { results: true },
-      }),
-      db.favoriteProfession.findFirst({
+    // Vocational profile (RIASEC) for the AI context.
+    const completed = await db.vocationalTestSession.findFirst({
+      where: { userId, status: "completed" },
+      orderBy: { completedAt: "desc" },
+      select: { results: true },
+    });
+
+    // Target occupation: the favorite the user chose in the questionnaire;
+    // fall back to the most-recently favorited one when none was sent.
+    let occCode: string | null = null;
+    let occTitle: string | undefined;
+    if (occupationCode) {
+      const occ = await db.cboOccupation.findUnique({
+        where: { code: occupationCode },
+        select: { code: true, title: true },
+      });
+      occCode = occ?.code ?? null;
+      occTitle = occ?.title ?? undefined;
+    } else {
+      const fav = await db.favoriteProfession.findFirst({
         where: { userId },
         orderBy: { createdAt: "desc" },
         select: { occupationCode: true, occupation: { select: { title: true } } },
-      }),
-    ]);
+      });
+      occCode = fav?.occupationCode ?? null;
+      occTitle = fav?.occupation?.title ?? undefined;
+    }
 
     const dominantTypes = (completed?.results as TestResults | null)?.dominantTypes;
     const ctx: RoadmapContext = {
       answers,
       dominantTypes: dominantTypes ?? undefined,
-      occupationTitle: favorite?.occupation?.title ?? undefined,
+      occupationTitle: occTitle,
     };
 
     // Generate the roadmap (fallback template if requested or if the AI call fails).
@@ -62,7 +80,7 @@ export async function POST(req: Request) {
       data: {
         userId,
         title,
-        occupationCode: favorite?.occupationCode ?? null,
+        occupationCode: occCode,
         questionnaire: answers as object,
         roadmap: roadmap as object,
         status: "active",

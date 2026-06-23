@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Route } from "lucide-react";
+import { Target } from "lucide-react";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -21,35 +21,23 @@ export default async function CareerPlanEntryPage() {
   });
   if (plan) redirect(`/career-plan/${plan.id}`);
 
-  // No plan yet → presentation screen with the call to create one. Same look as
-  // the other feature entry pages (sea background + translucent boxes), with the
-  // icon/title/phrase laid out like the vocational test entry.
+  // No plan yet → presentation panel laid out like the post-login home cards
+  // (glass surface, gold icon + title, supporting text and a CTA button).
   return (
-    <div className="-my-8 flex-1 bg-sea-top py-8">
-      <PageContainer className="max-w-3xl">
-        <div className="rounded-2xl border border-white/15 bg-white/10 px-6 py-6 text-white shadow-sm backdrop-blur-sm sm:px-10">
-          <div className="flex items-center gap-2">
-            <Route className="h-6 w-6 shrink-0 text-gold" />
-            <h1 className="text-2xl font-bold sm:text-3xl">Plano de Carreira</h1>
+    <div className="-my-8 flex flex-1 items-center bg-sea-top py-8">
+      <PageContainer className="max-w-xl">
+        <div className="rounded-2xl border border-white/15 bg-white/10 p-8 text-white shadow-sm backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <Target className="h-9 w-9 shrink-0 text-gold" />
+            <h1 className="text-xl font-bold sm:text-2xl">Monte seu plano de carreira profissional</h1>
           </div>
-          <p className="mt-2 max-w-xl text-white/80">
-            Responda 6 perguntas rápidas e receba um roadmap personalizado, com tarefas,
-            trilhas de aprendizado e recomendações para a sua carreira.
+          <p className="mt-4 text-sm leading-relaxed text-white/80">
+            Com base nos resultados do teste vocacional, nas profissões favoritadas e algumas
+            perguntas construa seu plano personalizado.
           </p>
-        </div>
-
-        <div className="mt-6 rounded-2xl border border-white/15 bg-white/10 p-6 text-white shadow-sm backdrop-blur-sm sm:p-8">
-          <div className="text-center">
-            <h2 className="text-xl font-bold text-white">Pronto para montar seu plano?</h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-white/80">
-              Leva poucos minutos. Você pode revisar e ajustar tudo depois.
-            </p>
-            <div className="mt-6">
-              <Button asChild className="bg-gold text-ocean hover:bg-gold-dark hover:text-white">
-                <Link href="/career-plan/start">Criar meu plano</Link>
-              </Button>
-            </div>
-          </div>
+          <Button asChild className="mt-6 bg-gold text-ocean hover:bg-gold-dark hover:text-white">
+            <Link href="/career-plan/start">Criar plano</Link>
+          </Button>
         </div>
       </PageContainer>
     </div>

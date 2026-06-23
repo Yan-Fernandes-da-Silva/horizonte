@@ -17,7 +17,7 @@ export function CareerPlanCard({ plan }: { plan: Plan | null }) {
         title="Plano de Carreira"
         state="Monte seu plano"
         support="Com base nos resultados e profissões favoritas."
-        href="/career-plan/start"
+        href="/career-plan"
       />
     );
   }

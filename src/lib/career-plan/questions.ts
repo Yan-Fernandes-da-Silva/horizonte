@@ -18,6 +18,7 @@ export interface SmartQuestion {
   maxSelections?: number;
 }
 
+// Order matters — this is exactly the order shown in the questionnaire (P1..P7).
 export const SMART_QUESTIONS: SmartQuestion[] = [
   {
     id: "moment",
@@ -34,19 +35,6 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
     ],
   },
   {
-    id: "deadline",
-    type: "single",
-    promptLabel: "Prazo para decisão",
-    text: "Qual é o prazo que você tem para tomar uma decisão?",
-    options: [
-      { value: "3m", label: "3 meses" },
-      { value: "6m", label: "6 meses" },
-      { value: "1a", label: "1 ano" },
-      { value: "2a3", label: "2 a 3 anos" },
-      { value: "sem_prazo", label: "Sem prazo definido" },
-    ],
-  },
-  {
     id: "goal",
     type: "single",
     promptLabel: "Principal objetivo",
@@ -58,6 +46,43 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
       { value: "flexibilidade", label: "Mais flexibilidade (horário / remoto)" },
       { value: "crescimento", label: "Crescimento rápido" },
       { value: "autonomia", label: "Mais autonomia" },
+    ],
+  },
+  {
+    id: "qualification",
+    type: "single",
+    promptLabel: "Disposição para qualificação",
+    text: "O quanto você está disposto a estudar / se qualificar?",
+    options: [
+      { value: "curso_rapido", label: "Cursos rápidos / livres" },
+      { value: "tecnico", label: "Curso técnico" },
+      { value: "graduacao", label: "Graduação" },
+      { value: "pos", label: "Pós-graduação" },
+    ],
+  },
+  {
+    id: "time_per_week",
+    type: "single",
+    promptLabel: "Tempo disponível por semana",
+    text: "Quanto tempo você tem disponível por semana para se dedicar?",
+    options: [
+      { value: "lt2", label: "Menos de 2h" },
+      { value: "2a5", label: "2 a 5h" },
+      { value: "5a10", label: "5 a 10h" },
+      { value: "gt10", label: "Mais de 10h" },
+    ],
+  },
+  {
+    id: "objective_deadline",
+    type: "single",
+    promptLabel: "Prazo do objetivo",
+    text: "Em quanto tempo deseja alcançar seu próximo objetivo de carreira?",
+    options: [
+      { value: "6m", label: "6 meses" },
+      { value: "1a", label: "1 ano" },
+      { value: "1a3", label: "1 a 3 anos" },
+      { value: "3a5", label: "3 a 5 anos" },
+      { value: "5a", label: "5 anos ou mais" },
     ],
   },
   {
@@ -87,18 +112,6 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
       { value: "nao_sei_comecar", label: "Não sei por onde começar" },
       { value: "mudar_area", label: "Quero mudar de área completamente" },
       { value: "crescer_onde_estou", label: "Quero crescer onde já estou" },
-    ],
-  },
-  {
-    id: "time_per_week",
-    type: "single",
-    promptLabel: "Tempo disponível por semana",
-    text: "Quanto tempo você tem disponível por semana para se dedicar?",
-    options: [
-      { value: "lt2", label: "Menos de 2h" },
-      { value: "2a5", label: "2 a 5h" },
-      { value: "5a10", label: "5 a 10h" },
-      { value: "gt10", label: "Mais de 10h" },
     ],
   },
 ];
