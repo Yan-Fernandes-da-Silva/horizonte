@@ -8,6 +8,10 @@ import {
 import type { SmartAnswers } from "@/lib/career-plan/questions";
 import type { TestResults } from "@/lib/vocational-test/types";
 
+// Allow up to 60s for AI roadmap generation — the Vercel Hobby default (~10s)
+// is too short for the Claude call, which takes ~10–30s.
+export const maxDuration = 60;
+
 // POST /api/career-plan/create — save answers, generate the roadmap (AI or fallback),
 // persist the plan and its tasks. Body: { answers, fallback?: boolean }.
 export async function POST(req: Request) {
