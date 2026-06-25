@@ -1,49 +1,45 @@
 "use client";
 
-import { MapPin, Briefcase } from "lucide-react";
+import { MapPin, CalendarDays } from "lucide-react";
 
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { REGIONS, UF_BY_REGION, ALL_UFS, UF_NAMES } from "@/lib/labor-market/geo";
+import { CAGED_PERIODS } from "@/lib/labor-market/periods";
 
 interface Props {
   region: string; // "" = Brasil
   uf: string; // "" = Todos
+  period: string; // YYYYMM (always set)
   onRegionChange: (region: string) => void;
   onUfChange: (uf: string) => void;
+  onPeriodChange: (period: string) => void;
 }
 
 const ALL_REGION = "BR";
 const ALL_UF = "ALL";
 
-/** Placeholder for filters that aren't wired up yet (economic activity). */
-function ComingSoon({ label }: { label: string }) {
-  return (
-    <div
-      title="Em breve"
-      className="flex h-10 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-dashed border-white/25 bg-white/5 px-3 text-sm text-white/50"
-    >
-      <span className="truncate">{label}</span>
-      <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
-        Em breve
-      </span>
-    </div>
-  );
-}
-
-export function FilterBar({ region, uf, onRegionChange, onUfChange }: Props) {
+export function FilterBar({ region, uf, period, onRegionChange, onUfChange, onPeriodChange }: Props) {
   const ufOptions = region ? UF_BY_REGION[region] ?? [] : ALL_UFS;
 
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2">
-      {/* Atividade econômica (left — coming soon, reserved space) */}
+      {/* Período (left — CAGED month) */}
       <div className="flex flex-wrap items-center gap-2">
         <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white/70">
-          <Briefcase className="h-4 w-4 text-gold" /> Atividade
+          <CalendarDays className="h-4 w-4 text-gold" /> Período
         </span>
-        <ComingSoon label="Subsetor (IBGE)" />
-        <ComingSoon label="Divisão (CNAE 2.0)" />
+        <Select value={period} onValueChange={onPeriodChange}>
+          <SelectTrigger className="h-10 w-48 bg-white text-ocean">
+            <SelectValue placeholder="Mês" />
+          </SelectTrigger>
+          <SelectContent>
+            {CAGED_PERIODS.map((p) => (
+              <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Localidade (right — active) */}

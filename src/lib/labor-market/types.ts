@@ -69,8 +69,9 @@ export interface DashboardData {
   profile: ProfileView;
 }
 
-/** Resolved filter scope from the URL (?region=&uf=). */
+/** Resolved filter scope from the URL (?region=&uf=&period=). */
 export interface Scope {
   region?: string;
   uf?: string;
+  period?: string; // YYYYMM — selects which CAGED month to show (RAIS is annual, unaffected)
 }

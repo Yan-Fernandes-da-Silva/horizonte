@@ -7,6 +7,7 @@ import { cache } from "react";
 import { db } from "@/lib/db";
 import { REGION_OF_UF, UF_NAMES, regionLabel } from "./geo";
 import { disputaLabel, levelFromPercentile, situationFromBalance } from "./indicators";
+import { DEFAULT_PERIOD } from "./periods";
 import type { DashboardData, Distribution, Scope, StateMetric } from "./types";
 
 // ── Real DB lookups (search + title) ───────────────────────────────────────────
@@ -41,7 +42,7 @@ export async function getOccupationTitle(code: string): Promise<string | null> {
 
 // ── Reference distributions across all occupations (for percentile indicators) ──
 
-const getReference = cache(async () => {
+const getReference = cache(async (period: string) => {
   const [rais, caged] = await Promise.all([
     db.marketMetrics.groupBy({
       by: ["occupationCode"],
@@ -51,7 +52,7 @@ const getReference = cache(async () => {
     }),
     db.marketMetrics.groupBy({
       by: ["occupationCode"],
-      where: { source: "caged" },
+      where: { source: "caged", period },
       _sum: { admissions: true },
     }),
   ]);
@@ -111,10 +112,17 @@ function scopeLabel(scope: Scope): string {
 // ── Main ────────────────────────────────────────────────────────────────────--
 
 export async function getDashboardData(code: string, scope: Scope): Promise<DashboardData> {
+  // CAGED is monthly: show only the selected period. RAIS is annual and period-agnostic.
+  const period = scope.period ?? DEFAULT_PERIOD;
   const [title, rows, reference] = await Promise.all([
     getOccupationTitle(code),
-    db.marketMetrics.findMany({ where: { occupationCode: code } }),
-    getReference(),
+    db.marketMetrics.findMany({
+      where: {
+        occupationCode: code,
+        OR: [{ source: "rais" }, { source: "caged", period }],
+      },
+    }),
+    getReference(period),
   ]);
 
   const hasData = rows.length > 0;

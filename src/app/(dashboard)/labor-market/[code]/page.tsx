@@ -11,13 +11,14 @@ import { FavoriteButton } from "@/components/features/vocational-test/FavoriteBu
 import { MarketSearchPanel } from "@/components/features/labor-market/MarketSearchPanel";
 import { OccupationDashboard } from "@/components/features/labor-market/OccupationDashboard";
 import { getDashboardData, getOccupationTitle } from "@/lib/labor-market/data";
+import { resolvePeriod } from "@/lib/labor-market/periods";
 
 export default async function OccupationDashboardPage({
   params,
   searchParams,
 }: {
   params: { code: string };
-  searchParams: { region?: string; uf?: string };
+  searchParams: { region?: string; uf?: string; period?: string };
 }) {
   const session = await getServerSession(authOptions);
   const userId = (session?.user as { id?: string } | undefined)?.id;
@@ -29,9 +30,10 @@ export default async function OccupationDashboardPage({
 
   const region = typeof searchParams.region === "string" ? searchParams.region : "";
   const uf = typeof searchParams.uf === "string" ? searchParams.uf : "";
+  const period = resolvePeriod(typeof searchParams.period === "string" ? searchParams.period : undefined);
 
   const [data, favorite] = await Promise.all([
-    getDashboardData(code, { region: region || undefined, uf: uf || undefined }),
+    getDashboardData(code, { region: region || undefined, uf: uf || undefined, period }),
     db.favoriteProfession.findUnique({
       where: { userId_occupationCode: { userId, occupationCode: code } },
       select: { id: true },
@@ -60,7 +62,7 @@ export default async function OccupationDashboardPage({
 
         <div className="mt-4">
           {data.hasData ? (
-            <OccupationDashboard data={data} region={region} uf={uf} />
+            <OccupationDashboard data={data} region={region} uf={uf} period={period} />
           ) : (
             <div className="rounded-2xl border border-dashed border-white/25 bg-white/5 p-10 text-center backdrop-blur-sm">
               <p className="text-lg font-semibold text-white">Dados não disponíveis</p>
