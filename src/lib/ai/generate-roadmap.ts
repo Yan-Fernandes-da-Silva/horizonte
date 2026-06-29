@@ -19,7 +19,7 @@ export interface RoadmapStep {
 
 export interface RoadmapChallenge {
   obstacle: string;
-  howToOvercome: string;
+  howToOvercome: string[];
 }
 
 export interface Roadmap {
@@ -50,10 +50,10 @@ export interface Roadmap {
     projects: string[];
   };
   recommendations: {
-    networking: string;
-    languages: string;
-    portfolio: string;
-    habits: string;
+    networking: string[];
+    languages: string[];
+    portfolio: string[];
+    habits: string[];
   };
 }
 
@@ -73,10 +73,10 @@ Diretrizes:
 - "steps" são as etapas estratégicas entre o ponto de partida e o destino (3 a 6 etapas).
 - "develop" lista o que desenvolver ao longo do caminho: competências (habilidades/conhecimentos), experiências (práticas/vivências) e resultados (entregas/conquistas observáveis).
 - "firstStep" é UMA ação concreta e pequena para a pessoa começar JÁ esta semana.
-- "challenges" parte dos obstáculos informados pela pessoa e diz como superá-los.
+- "challenges" parte dos obstáculos informados pela pessoa; "howToOvercome" é uma LISTA de 2 a 4 itens curtos e práticos de como superar cada obstáculo (uma ação por item, sem juntar tudo num parágrafo).
 - Prazos do cronograma: shortTerm = até 6 meses; mediumTerm = 6 meses a 3 anos; longTerm = 3 anos ou mais. Use "durationLabel" coerente com cada horizonte e com o tempo semanal disponível.
 - Trilhas: "content" = conteúdos gratuitos (artigos, vídeos, canais, podcasts); além de cursos, livros e projetos práticos reais e acessíveis (inclua opções gratuitas quando possível).
-- As recomendações de networking, idiomas, portfólio e hábitos devem ser práticas.`;
+- As recomendações de networking, idiomas, portfólio e hábitos devem ser práticas e vir como LISTA (cada uma com 2 a 4 itens curtos, uma dica por item — nunca um parágrafo único).`;
 
 // Raw JSON Schema (no min/max constraints; additionalProperties:false everywhere).
 const taskSchema = {
@@ -103,7 +103,7 @@ const challengeSchema = {
   additionalProperties: false,
   properties: {
     obstacle: { type: "string" },
-    howToOvercome: { type: "string" },
+    howToOvercome: { type: "array", items: { type: "string" } },
   },
   required: ["obstacle", "howToOvercome"],
 };
@@ -148,10 +148,10 @@ const ROADMAP_SCHEMA = {
       type: "object",
       additionalProperties: false,
       properties: {
-        networking: { type: "string" },
-        languages: { type: "string" },
-        portfolio: { type: "string" },
-        habits: { type: "string" },
+        networking: stringArray,
+        languages: stringArray,
+        portfolio: stringArray,
+        habits: stringArray,
       },
       required: ["networking", "languages", "portfolio", "habits"],
     },
@@ -173,10 +173,10 @@ function buildUserMessage(ctx: RoadmapContext): string {
 2) Onde a pessoa está hoje (startingPoint), onde quer chegar (destination) e as etapas estratégicas entre os dois (steps).
 3) O que desenvolver: competências, experiências e resultados (develop).
 4) Um primeiro passo para esta semana (firstStep).
-5) Desafios com base nos obstáculos informados e como superá-los (challenges).
+5) Desafios com base nos obstáculos informados; para cada um, uma LISTA de itens curtos de como superá-lo (challenges.howToOvercome).
 6) De 3 a 5 tarefas para cada horizonte: curto (até 6 meses), médio (6 meses a 3 anos) e longo (3 anos ou mais).
 7) Trilhas de aprendizado (conteúdos gratuitos, cursos, livros, projetos).
-8) Recomendações (networking, idiomas, portfólio, hábitos).`;
+8) Recomendações (networking, idiomas, portfólio, hábitos) — cada uma como LISTA de itens curtos.`;
 }
 
 /** Calls Claude with structured output. Throws on refusal / invalid output. */
@@ -230,11 +230,17 @@ export function buildFallbackRoadmap(ctx: RoadmapContext): Roadmap {
     challenges: [
       {
         obstacle: obstacles !== "—" ? obstacles : "Falta de clareza sobre por onde começar",
-        howToOvercome: "Divida o objetivo em metas pequenas e comece pelo primeiro passo desta semana.",
+        howToOvercome: [
+          "Divida o objetivo em metas pequenas e mensuráveis.",
+          "Comece pelo primeiro passo desta semana.",
+        ],
       },
       {
         obstacle: "Manter a consistência",
-        howToOvercome: `Reserve seu tempo disponível (${time}) num horário fixo na semana.`,
+        howToOvercome: [
+          `Reserve seu tempo disponível (${time}) num horário fixo na semana.`,
+          "Acompanhe seu progresso e ajuste o ritmo quando precisar.",
+        ],
       },
     ],
     shortTerm: [
@@ -256,10 +262,22 @@ export function buildFallbackRoadmap(ctx: RoadmapContext): Roadmap {
       projects: ["Um projeto prático aplicando o que aprendeu"],
     },
     recommendations: {
-      networking: "Participe de grupos e eventos da área para criar conexões.",
-      languages: "Inglês básico ajuda a acessar mais conteúdo e oportunidades.",
-      portfolio: "Mantenha um portfólio simples e atualizado.",
-      habits: "Reserve um horário fixo por semana para estudar e evoluir.",
+      networking: [
+        "Participe de grupos e comunidades da área.",
+        "Vá a eventos (online ou presenciais) para criar conexões.",
+      ],
+      languages: [
+        "Inglês básico ajuda a acessar mais conteúdo e oportunidades.",
+        "Pratique a leitura técnica em inglês aos poucos.",
+      ],
+      portfolio: [
+        "Mantenha um portfólio simples e atualizado.",
+        "Inclua 2–3 projetos que mostrem suas competências.",
+      ],
+      habits: [
+        "Reserve um horário fixo por semana para estudar.",
+        "Revise seu progresso e celebre pequenas conquistas.",
+      ],
     },
   };
 }

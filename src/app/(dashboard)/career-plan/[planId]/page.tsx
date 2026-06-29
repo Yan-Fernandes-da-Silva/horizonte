@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageContainer } from "@/components/shared/PageContainer";
 import { TaskItem } from "@/components/features/career-plan/TaskItem";
 import { AddTaskForm } from "@/components/features/career-plan/AddTaskForm";
+import { DeletePlanButton } from "@/components/features/career-plan/DeletePlanButton";
 import type { Roadmap } from "@/lib/ai/generate-roadmap";
 
 const SECTIONS = [
@@ -49,6 +50,15 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
   const develop = roadmap?.develop ?? { competencias: [], experiencias: [], resultados: [] };
   const challenges = roadmap?.challenges ?? [];
   const trails = roadmap?.learningTrails ?? { content: [], courses: [], books: [], projects: [] };
+
+  // Recommendations / challenges may be a list (new plans) or a single string (older
+  // plans). Normalize to an array so both render as bullet lists.
+  const toList = (v: unknown): string[] =>
+    Array.isArray(v)
+      ? v.filter((x): x is string => typeof x === "string" && x.trim() !== "")
+      : typeof v === "string" && v.trim() !== ""
+        ? [v]
+        : [];
 
   const achievements = [
     { label: "Primeiros passos", earned: done >= 1, icon: Flag },
@@ -221,7 +231,11 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
                 {challenges.map((c, i) => (
                   <div key={i} className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
                     <p className="flex items-center gap-1.5 font-semibold text-white"><TriangleAlert className="h-4 w-4 text-sun" /> {c.obstacle}</p>
-                    <p className="mt-1.5 text-sm text-white/80">{c.howToOvercome}</p>
+                    <ul className="mt-2 space-y-1.5">
+                      {toList(c.howToOvercome).map((item, j) => (
+                        <li key={j} className="flex gap-2 text-sm text-white/80"><span className="text-gold">•</span> {item}</li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
@@ -233,20 +247,26 @@ export default async function CareerPlanRoadmapPage({ params }: { params: { plan
             <h2 className="mb-3 text-xl font-bold text-white">Recomendações Estratégicas</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {[
-                { icon: Users, title: "Networking", text: roadmap.recommendations?.networking },
-                { icon: Globe, title: "Idiomas", text: roadmap.recommendations?.languages },
-                { icon: BriefcaseBusiness, title: "Portfólio", text: roadmap.recommendations?.portfolio },
-                { icon: Lightbulb, title: "Hábitos", text: roadmap.recommendations?.habits },
+                { icon: Users, title: "Networking", items: toList(roadmap.recommendations?.networking) },
+                { icon: Globe, title: "Idiomas", items: toList(roadmap.recommendations?.languages) },
+                { icon: BriefcaseBusiness, title: "Portfólio", items: toList(roadmap.recommendations?.portfolio) },
+                { icon: Lightbulb, title: "Hábitos", items: toList(roadmap.recommendations?.habits) },
               ].map((r) => (
                 <div key={r.title} className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
                   <p className="flex items-center gap-1.5 font-semibold text-white"><r.icon className="h-4 w-4 text-sky-light" /> {r.title}</p>
-                  <p className="mt-1 text-sm text-white/80">{r.text}</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {r.items.map((item, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-white/80"><span className="text-gold">•</span> {item}</li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
           </section>
         </>
       )}
+
+      <DeletePlanButton planId={plan.id} />
     </PageContainer>
     </div>
   );
