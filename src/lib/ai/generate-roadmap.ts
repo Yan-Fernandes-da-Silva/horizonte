@@ -188,7 +188,7 @@ export async function generateCareerRoadmap(ctx: RoadmapContext): Promise<Roadma
     max_tokens: 8000,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: buildUserMessage(ctx) }],
-    output_config: { format: { type: "json_schema", name: "roadmap", schema: ROADMAP_SCHEMA } },
+    output_config: { format: { type: "json_schema", schema: ROADMAP_SCHEMA } },
   } as Anthropic.MessageCreateParamsNonStreaming);
 
   if (response.stop_reason === "refusal") {
