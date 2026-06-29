@@ -47,6 +47,9 @@ next-env.d.ts
 /GUIA_DE_FEEDBACK.md
 /GUIA_TESTE_MOBILE.md
 
+# presentation / INPI material (banner, videos, forms — kept locally, not versioned)
+/apresentacao/
+
 # local QA / screenshot scratch (never committed)
 /cdpshot.mjs
 /mapshot_*.png
